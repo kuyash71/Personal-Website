@@ -4,7 +4,7 @@ import { isLocale } from "@/i18n/config";
 import { messages } from "@/i18n/messages";
 
 type ProjectsPageProps = {
-  params: Promise<{ locale: string }> | { locale: string };
+  params: Promise<{ locale: string }>;
 };
 
 export default async function ProjectsPage({ params }: ProjectsPageProps) {

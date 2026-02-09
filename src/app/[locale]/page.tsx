@@ -4,7 +4,7 @@ import { messages } from "@/i18n/messages";
 import { notFound } from "next/navigation";
 
 type HomePageProps = {
-  params: Promise<{ locale: string }> | { locale: string };
+  params: Promise<{ locale: string }>;
 };
 
 export default async function HomePage({ params }: HomePageProps) {

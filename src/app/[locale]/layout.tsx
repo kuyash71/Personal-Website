@@ -7,7 +7,7 @@ import { messages } from "@/i18n/messages";
 
 type LocaleLayoutProps = {
   children: ReactNode;
-  params: Promise<{ locale: string }> | { locale: string };
+  params: Promise<{ locale: string }>;
 };
 
 export function generateStaticParams() {
@@ -17,7 +17,7 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params
 }: {
-  params: Promise<{ locale: string }> | { locale: string };
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const resolvedParams = await params;
 

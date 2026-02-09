@@ -222,9 +222,9 @@ Language switching (`TR`/`EN`) is available in the navbar and keeps users on the
 | `2026-02-09` | Sun Trilogy starts as WIP | `accepted` | `docs/architecture/architecture.md` |
 | `2026-02-09` | Custom 3-index versioning model adopted | `accepted` | `docs/architecture/architecture.md` |
 | `2026-02-09` | Locale-based routing for `tr`/`en` adopted | `accepted` | `docs/architecture/architecture.md` |
+| `2026-02-09` | Contact API responses are locale-aware (`tr`/`en`) | `accepted` | `docs/architecture/architecture.md` |
 
 ## 14. Open Questions
 
 - [ ] Should project content sync with GitHub API automatically?
 - [ ] Do we need localized slug differences per locale, or keep canonical shared slugs?
-- [ ] Should contact response messages become fully locale-aware server-side?

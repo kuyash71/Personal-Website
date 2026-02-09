@@ -36,6 +36,12 @@ export type Messages = {
       message: string;
     };
     submit: string;
+    submitting: string;
+    status: {
+      success: string;
+      error: string;
+      networkError: string;
+    };
     note: string;
   };
 };
@@ -77,6 +83,12 @@ export const messages: Record<Locale, Messages> = {
         message: "Mesaj"
       },
       submit: "Mesaj Gonder",
+      submitting: "Gonderiliyor...",
+      status: {
+        success: "Mesaj basariyla gonderildi.",
+        error: "Mesaj gonderilemedi.",
+        networkError: "Baglanti hatasi olustu. Lutfen tekrar dene."
+      },
       note: "E-posta gonderimi icin .env.local dosyasinda EMAIL_PROVIDER=resend ve ilgili anahtarlar tanimli olmalidir."
     }
   },
@@ -116,6 +128,12 @@ export const messages: Record<Locale, Messages> = {
         message: "Message"
       },
       submit: "Send Message",
+      submitting: "Sending...",
+      status: {
+        success: "Your message was sent successfully.",
+        error: "Your message could not be sent.",
+        networkError: "A network error occurred. Please try again."
+      },
       note: "To send email, .env.local must include EMAIL_PROVIDER=resend and related credentials."
     }
   }

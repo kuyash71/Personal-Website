@@ -178,6 +178,31 @@ a {
   background: var(--brand-strong);
 }
 
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.form-status {
+  margin-top: 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.form-status-success {
+  border-color: #7db395;
+  color: #215b39;
+  background: #ebf8f0;
+}
+
+.form-status-error {
+  border-color: #d8a1a1;
+  color: #7e2020;
+  background: #fdecec;
+}
+
 .footer-note {
   color: var(--muted);
   font-size: 14px;
