@@ -57,6 +57,7 @@ pnpm run test:e2e:install
 | `EMAIL_API_KEY` | Yes | - | Provider API key | `re_xxx` |
 | `EMAIL_FROM` | Yes | - | Verified sender identity | `Portfolio <onboarding@resend.dev>` |
 | `CONTACT_MAX_PAYLOAD_BYTES` | No | `10000` | Maximum accepted payload size for contact endpoint (bounded to `1024-100000`) | `10000` |
+| `CONTACT_LOGGING_ENABLED` | No | `false` (local), `true` (production fallback) | Enable structured contact API event logs | `true` |
 | `RATE_LIMIT_WINDOW_MS` | Yes | `600000` | Rate-limit window in milliseconds (bounded to `60000-3600000`) | `600000` |
 | `RATE_LIMIT_MAX_REQUESTS` | Yes | `5` | Max requests per window (bounded to `1-20`) | `5` |
 
@@ -156,7 +157,7 @@ pnpm run test:e2e:install
 - `main` branch CI is green:
   `lint`, `test`, `build`, `e2e smoke`, `security scan`.
 - Production environment variables are configured in Vercel:
-  `CONTACT_TO_EMAIL`, `EMAIL_PROVIDER`, `EMAIL_API_KEY`, `EMAIL_FROM`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_MAX_REQUESTS`, `CONTACT_MAX_PAYLOAD_BYTES` (optional, defaults to `10000`).
+  `CONTACT_TO_EMAIL`, `EMAIL_PROVIDER`, `EMAIL_API_KEY`, `EMAIL_FROM`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_MAX_REQUESTS`, `CONTACT_MAX_PAYLOAD_BYTES` (optional, defaults to `10000`), and `CONTACT_LOGGING_ENABLED` (optional).
 - Latest PR preview is reviewed for:
   `/{locale}` routing, navbar links, and contact form behavior.
 

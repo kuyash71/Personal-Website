@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { defaultLocale, isLocale, type Locale } from "@/i18n/config";
 import { sendContactEmail } from "@/lib/email/send-contact-email";
+import { logContactApiEvent } from "@/lib/observability/contact-api-logging";
 import { isAllowedByRateLimit } from "@/lib/security/rate-limit";
 import { validateContactPayload } from "@/lib/validation/contact";
 
@@ -196,7 +197,19 @@ function getContentLengthBytes(request: NextRequest): number | null {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
 }
 
+function buildJsonResponse(
+  body: Record<string, unknown>,
+  status: number,
+  requestId: string,
+  initHeaders?: HeadersInit
+): NextResponse {
+  const headers = new Headers(initHeaders);
+  headers.set("x-request-id", requestId);
+  return NextResponse.json(body, { status, headers });
+}
+
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  const requestId = request.headers.get("x-request-id")?.trim() || crypto.randomUUID();
   const { windowMs: rateLimitWindow, maxRequests: rateLimitMax } = getRateLimitConfig();
   const payloadLimitBytes = getPayloadLimitBytes();
 
@@ -206,22 +219,38 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const fallbackMessages = apiMessages[fallbackLocale];
 
   if (!allowed) {
-    return NextResponse.json(
+    logContactApiEvent("rate_limited", {
+      requestId,
+      status: 429,
+      ip: ipKey,
+      locale: fallbackLocale,
+      rateLimitWindowMs: rateLimitWindow,
+      rateLimitMaxRequests: rateLimitMax
+    });
+
+    return buildJsonResponse(
       { ok: false, message: fallbackMessages.tooManyRequests },
+      429,
+      requestId,
       {
-        status: 429,
-        headers: {
-          "Retry-After": String(Math.ceil(rateLimitWindow / 1000))
-        }
+        "Retry-After": String(Math.ceil(rateLimitWindow / 1000))
       }
     );
   }
 
   const contentLength = getContentLengthBytes(request);
   if (contentLength !== null && contentLength > payloadLimitBytes) {
-    return NextResponse.json(
+    logContactApiEvent("payload_too_large", {
+      requestId,
+      status: 413,
+      ip: ipKey,
+      locale: fallbackLocale
+    });
+
+    return buildJsonResponse(
       { ok: false, message: fallbackMessages.payloadTooLarge },
-      { status: 413 }
+      413,
+      requestId
     );
   }
 
@@ -229,12 +258,21 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   let payload: Record<string, unknown> = {};
 
   if (!isJsonContentType(contentType) && !isFormContentType(contentType)) {
-    return NextResponse.json(
+    logContactApiEvent("unsupported_content_type", {
+      requestId,
+      status: 415,
+      ip: ipKey,
+      locale: fallbackLocale,
+      contentType
+    });
+
+    return buildJsonResponse(
       {
         ok: false,
         message: fallbackMessages.unsupportedContentType
       },
-      { status: 415 }
+      415,
+      requestId
     );
   }
 
@@ -244,9 +282,18 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       const rawBodyBytes = new TextEncoder().encode(rawBody).length;
 
       if (rawBodyBytes > payloadLimitBytes) {
-        return NextResponse.json(
+        logContactApiEvent("payload_too_large", {
+          requestId,
+          status: 413,
+          ip: ipKey,
+          locale: fallbackLocale,
+          contentType
+        });
+
+        return buildJsonResponse(
           { ok: false, message: fallbackMessages.payloadTooLarge },
-          { status: 413 }
+          413,
+          requestId
         );
       }
 
@@ -256,10 +303,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       payload = parseFormData(formData);
     }
   } catch {
-    return NextResponse.json(
-      { ok: false, message: fallbackMessages.invalidBody },
-      { status: 400 }
-    );
+    logContactApiEvent("invalid_body", {
+      requestId,
+      status: 400,
+      ip: ipKey,
+      locale: fallbackLocale,
+      contentType
+    });
+
+    return buildJsonResponse({ ok: false, message: fallbackMessages.invalidBody }, 400, requestId);
   }
 
   const locale = resolveRequestLocale(request, payload);
@@ -267,31 +319,58 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const validation = validateContactPayload(payload, locale);
 
   if (!validation.ok) {
-    return NextResponse.json(
+    logContactApiEvent("validation_failed", {
+      requestId,
+      status: 400,
+      ip: ipKey,
+      locale,
+      contentType,
+      validationErrorCount: validation.errors.length
+    });
+
+    return buildJsonResponse(
       { ok: false, message: dictionary.validationError, errors: validation.errors },
-      { status: 400 }
+      400,
+      requestId
     );
   }
 
   const sendResult = await sendContactEmail(validation.data);
 
   if (!sendResult.ok) {
-    return NextResponse.json(
+    logContactApiEvent("delivery_failed", {
+      requestId,
+      status: 503,
+      ip: ipKey,
+      locale,
+      detail: sendResult.message
+    });
+
+    return buildJsonResponse(
       {
         ok: false,
         message: dictionary.deliveryFailed,
         detail: sendResult.message
       },
-      { status: 503 }
+      503,
+      requestId
     );
   }
 
-  return NextResponse.json(
+  logContactApiEvent("accepted", {
+    requestId,
+    status: 202,
+    ip: ipKey,
+    locale
+  });
+
+  return buildJsonResponse(
     {
       ok: true,
       message: dictionary.accepted,
       accepted: true
     },
-    { status: 202 }
+    202,
+    requestId
   );
 }

@@ -128,6 +128,14 @@ function validateEnvironment(target) {
     }
   }
 
+  const loggingEnabled = process.env.CONTACT_LOGGING_ENABLED;
+  if (
+    loggingEnabled &&
+    !["true", "false"].includes(loggingEnabled.trim().toLowerCase())
+  ) {
+    errors.push("CONTACT_LOGGING_ENABLED must be 'true' or 'false' when provided.");
+  }
+
   const nodeEnv = (process.env.NODE_ENV ?? "").trim();
   if (target === "production") {
     if (!nodeEnv) {

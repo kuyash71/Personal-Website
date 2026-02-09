@@ -60,6 +60,7 @@ This repository contains a modular personal website with built-in multi-language
 Copy `.env.example` to `.env.local` and set required values before testing contact delivery.
 Current email pipeline supports `EMAIL_PROVIDER=resend`.
 `CONTACT_MAX_PAYLOAD_BYTES` is optional and defaults to `10000` if omitted.
+`CONTACT_LOGGING_ENABLED` controls structured contact API logs (`false` locally unless explicitly enabled).
 
 ## Next Step
 

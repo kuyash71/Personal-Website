@@ -195,7 +195,8 @@ Measurement policy:
 ## 10. Observability
 
 - Logging:
-  - Contact API response class, validation failures, rate-limit hits.
+  - Contact API structured event logs (`accepted`, `validation_failed`, `rate_limited`, `delivery_failed`, etc.).
+  - Correlate responses via `x-request-id` for contact API paths.
 - Metrics:
   - Submission success/failure rates.
 - Alerts:
@@ -215,6 +216,7 @@ Measurement policy:
   - `EMAIL_API_KEY`
   - `EMAIL_FROM`
   - `CONTACT_MAX_PAYLOAD_BYTES`
+  - `CONTACT_LOGGING_ENABLED`
   - `RATE_LIMIT_WINDOW_MS`
   - `RATE_LIMIT_MAX_REQUESTS`
 
@@ -245,6 +247,7 @@ Measurement policy:
 | `2026-02-09` | Release-based performance targets documented (`1.0`/`1.1`/`1.1a+`) | `accepted` | `docs/architecture/architecture.md` |
 | `2026-02-09` | Strict lint baseline documented as merge gate | `accepted` | `docs/setup/setup.md` |
 | `2026-02-09` | Contact API payload size limit enforced via `CONTACT_MAX_PAYLOAD_BYTES` | `accepted` | `src/app/api/contact/route.ts` |
+| `2026-02-09` | Contact API structured observability logs enabled via `CONTACT_LOGGING_ENABLED` with request-id correlation | `accepted` | `src/lib/observability/contact-api-logging.ts` |
 
 ## 14. Open Questions
 

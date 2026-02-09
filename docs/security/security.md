@@ -95,7 +95,11 @@
 ## 5. Logging, Monitoring, and Alerting
 
 - Track:
-  Contact request outcomes and rate-limit events.
+  Contact request outcomes, validation failures, provider failures, and rate-limit events.
+- Log format:
+  Structured JSON logs with request ID and anonymized IP (no message body or credential content).
+- Runtime control:
+  `CONTACT_LOGGING_ENABLED=true|false` (defaults to enabled in production fallback, disabled locally).
 - Alert channel:
   Platform notifications and/or email.
 - Severity levels:
