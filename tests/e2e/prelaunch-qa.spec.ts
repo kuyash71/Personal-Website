@@ -15,7 +15,7 @@ const localeNavCases: LocaleNavCase[] = [
     locale: "tr",
     links: [
       { label: "Anasayfa", path: "/tr", heading: "Merhaba" },
-      { label: "Sun Trilogy", path: "/tr/sun-trilogy", heading: "Güneş Üçlemesi" },
+      { label: "Sun Trilogy", path: "/tr/sun-trilogy", heading: "SUN TRILOGY" },
       { label: "Projeler", path: "/tr/projects", heading: "Projeler" },
       { label: "İletişim", path: "/tr/contact", heading: "İletişim" }
     ]
@@ -48,9 +48,10 @@ for (const navCase of localeNavCases) {
   test(`validates navbar links for ${navCase.locale}`, async ({ page }) => {
     const initialResponse = await page.goto(`/${navCase.locale}`);
     assertPublicResponse(initialResponse, `/${navCase.locale}`);
+    const primaryNavigation = page.getByRole("navigation", { name: "Primary navigation" });
 
     for (const link of navCase.links) {
-      await page.getByRole("link", { name: link.label }).click();
+      await primaryNavigation.getByRole("link", { name: link.label, exact: true }).click();
       await expect(page).toHaveURL(new RegExp(`${link.path.replace("/", "\\/")}$`));
       await expect(page.getByRole("heading", { name: link.heading })).toBeVisible();
     }

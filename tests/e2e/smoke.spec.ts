@@ -12,7 +12,7 @@ test("supports language switch while preserving route segment", async ({ page })
   await page.goto("/tr/projects");
 
   await expect(page.getByRole("heading", { name: "Projeler" })).toBeVisible();
-  await page.getByRole("link", { name: "EN" }).click();
+  await page.getByLabel("Language switch").getByRole("link", { name: "EN", exact: true }).click();
 
   await expect(page).toHaveURL(/\/en\/projects$/);
   await expect(page.getByRole("heading", { name: "Projects" })).toBeVisible();
