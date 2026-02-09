@@ -10,45 +10,46 @@
 | Last Updated | `2026-02-09` |
 | Version | `v0.1.0` |
 
-## 1. Amaç
+## 1. Objective
 
-Bu dokuman, secilen teknolojilerin proje icinde nerede kullanildigini dosya/katman seviyesinde gosterir.
+Map each selected technology to concrete files and runtime layers.
 
-## 2. Katman Bazli Kullanim
+## 2. Layer-to-File Mapping
 
-| Katman | Kullanilan teknoloji | Nerede |
+| Layer | Technology | Where It Is Used |
 | --- | --- | --- |
-| UI / Routing | `Next.js App Router`, `React` | `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/gunes-uclemesi/page.tsx`, `src/app/projeler/page.tsx`, `src/app/iletisim/page.tsx` |
-| UI Bilesenleri | `React` | `src/components/layout/navbar.tsx` |
-| Tip Kontratlari | `TypeScript` | `src/types/content.ts` |
-| Icerik Veri Katmani | `TypeScript` | `src/content/profile.ts`, `src/content/projects.ts`, `src/content/sun-trilogy.ts`, `src/content/contact.ts` |
-| API Katmani | `Next.js Route Handlers` | `src/app/api/contact/route.ts`, `src/app/api/health/route.ts` |
-| Dogrulama | `TypeScript utility` | `src/lib/validation/contact.ts` |
-| Guvenlik (Rate Limit) | `TypeScript utility` | `src/lib/security/rate-limit.ts` |
-| E-posta Entegrasyonu | `fetch` + `Resend API` | `src/lib/email/send-contact-email.ts` |
-| Stil | Global CSS | `src/app/globals.css` |
+| Routing / page tree | `Next.js App Router` | `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/[locale]/*` |
+| Localization routing | `Next.js middleware` | `middleware.ts` |
+| Locale config and dictionaries | TypeScript modules | `src/i18n/config.ts`, `src/i18n/messages.ts` |
+| Shared UI | `React` components | `src/components/layout/navbar.tsx` |
+| Content model | Typed content objects | `src/content/profile.ts`, `src/content/projects.ts`, `src/content/sun-trilogy.ts` |
+| API handlers | `Next.js Route Handlers` | `src/app/api/contact/route.ts`, `src/app/api/health/route.ts` |
+| Validation | Utility module | `src/lib/validation/contact.ts` |
+| Rate limiting | Utility module | `src/lib/security/rate-limit.ts` |
+| Email integration | `fetch` + provider API | `src/lib/email/send-contact-email.ts` |
+| Styling | Global CSS | `src/app/globals.css` |
 
-## 3. Calisma Zamani ve Araclar
+## 3. Toolchain and Runtime Controls
 
-| Alan | Yazilim | Nerede tanimli |
+| Area | Tooling | Source of Truth |
 | --- | --- | --- |
-| Paket yonetimi | `pnpm` | Komutlar ve lockfile akisi (`pnpm install`, `pnpm run ...`) |
-| Build/Dev scripts | `Next.js CLI` | `package.json` -> `dev`, `build`, `start`, `lint` |
-| Tip denetimi | `TypeScript compiler` | `tsconfig.json` |
-| Lint denetimi | `ESLint` + `eslint-config-next` | `package.json` (devDependencies), `.eslintrc.json` |
-| Runtime config | Ortam degiskenleri | `.env.example`, `docs/setup/setup.md` |
+| Dependency management | `pnpm` | `package.json` + lockfile workflow |
+| Node runtime pinning | Node 22 | `.nvmrc`, `.node-version`, `package.json -> engines` |
+| Type checking | TypeScript | `tsconfig.json` |
+| Linting | ESLint + Next config | `.eslintrc.json`, `package.json` |
+| Runtime secrets | Environment variables | `.env.example`, `docs/setup/setup.md` |
 
-## 4. Contact Akisi Uzerinden Teknoloji Izleme
+## 4. Contact Flow Trace
 
-1. Form UI (`React`) `src/app/iletisim/page.tsx` icinde render edilir.
-2. Istek `POST /api/contact` (`Next.js Route Handler`) ile alinir.
-3. Veri `validateContactPayload` ile dogrulanir (`src/lib/validation/contact.ts`).
-4. Rate-limit `isAllowedByRateLimit` ile kontrol edilir (`src/lib/security/rate-limit.ts`).
-5. `sendContactEmail` ile provider'a iletilir (`src/lib/email/send-contact-email.ts`).
+1. Localized contact page renders at `/{locale}/contact`.
+2. Form submits to `POST /api/contact`.
+3. Payload validated by `validateContactPayload`.
+4. Anti-spam checks run through `isAllowedByRateLimit`.
+5. Email is forwarded by `sendContactEmail`.
 
-## 5. Bakim Notu
+## 5. Maintenance Rule
 
-Yeni teknoloji eklendiginde bu dosyada 3 bilgi mutlaka guncellenmelidir:
-- Neden eklendi?
-- Hangi dosya/katmanda kullaniliyor?
-- Operasyonel olarak hangi env veya script'e etkisi var?
+Whenever a new technology is introduced, update this document with:
+- Why it was added.
+- Exactly where it is used.
+- Which env/script/release process it affects.

@@ -1,4 +1,4 @@
-# Security Baseline - Personal Website
+# Security Baseline
 
 ## Document Control
 
@@ -14,124 +14,113 @@
 ## 1. Scope and Security Objectives
 
 - In scope assets:
-  - Public website pages
-  - `POST /api/contact` endpoint'i
-  - Environment secrets (email provider key)
+  - Public localized pages (`/tr/*`, `/en/*`)
+  - `POST /api/contact`
+  - Environment secrets for email provider
 - Data handled:
-  - Contact form alanlari: ad, e-posta, konu, mesaj
-  - Teknik log verileri (minimum)
+  - Contact fields: name, email, subject, message
+  - Minimal operational logging
 - Security objectives:
-  - Contact endpoint'ini spam ve suistimalden korumak.
-  - XSS/Injection risklerini minimize etmek.
-  - Hassas veriyi minimum tutmak ve guvenli tasimak.
+  - Protect contact endpoint against abuse.
+  - Prevent payload-based injection vectors.
+  - Keep secrets server-side only.
 
 ## 2. Threat Model Summary
 
 | Threat | Attack Surface | Impact | Control | Residual Risk |
 | --- | --- | --- | --- | --- |
-| Spam bot flood | Contact form/API | High | Rate limit + honeypot + IP throttling | Medium |
-| XSS payload | Form alanlari ve icerik render | High | Server-side validation + output encoding | Low |
-| Secret leakage | Deploy env/config | High | Secrets only in env, no client exposure | Low |
-| Header misconfiguration | Public responses | Medium | CSP + HSTS + nosniff + frame-ancestors | Low |
-| Dependency CVE | Build/runtime dependencies | Medium | Haftalik scan + lockfile discipline | Medium |
+| Bot spam flood | Contact form/API | High | Honeypot + rate-limit + validation | Medium |
+| Input injection/XSS payloads | Form fields/rendering | High | Strict server-side validation + safe output handling | Low |
+| Secret leakage | Runtime/config | High | Env-only credentials, no client exposure | Low |
+| Misconfigured response headers | Public routes | Medium | Security header policy (CSP/HSTS/etc.) | Low |
+| Dependency CVEs | Build/runtime dependencies | Medium | Scheduled dependency checks | Medium |
 
 ## 3. Security Controls
 
 ### 3.1 Application Security
 
 - Input validation:
-  Sunucu tarafinda schema validasyonu, length limitleri, e-posta format kontrolu.
-- Output encoding:
-  Kullanici kaynakli tum metinler encode edilerek render edilir.
-- Secure headers (CSP, HSTS, X-Frame-Options):
-  - CSP: script/style/image kaynaklarini kisitla
-  - HSTS: production'da zorunlu
-  - X-Frame-Options: `DENY` veya CSP `frame-ancestors 'none'`
-  - X-Content-Type-Options: `nosniff`
+  All contact fields are validated server-side.
+- Output safety:
+  Avoid rendering untrusted HTML directly.
+- Secure headers:
+  Document and enforce CSP/HSTS/nosniff/frame protections.
 - CSRF strategy:
-  Contact endpoint'i icin `Origin`/`Host` kontrolu ve sadece `POST` kabul.
-- Rate limiting strategy:
-  IP bazli pencere limiti (ornek: 10 dakikada 5 istek).
+  Restrict to intended method and origin-aware deployment defaults.
+- Rate limiting:
+  IP-based windowing via `isAllowedByRateLimit`.
 
 ### 3.2 Authentication and Authorization
 
-- Auth method:
-  V1'de auth yok.
-- Session/token lifecycle:
-  Uygulanmiyor (auth olmadigi icin).
-- Access control model:
-  Public read-only pages + kontrollu contact API.
+- v1 model:
+  No user authentication.
+- Access model:
+  Public read-only pages with constrained write path via contact endpoint.
 
 ### 3.3 Data Protection
 
-- Encryption in transit:
-  HTTPS/TLS zorunlu.
-- Encryption at rest:
-  Kalici saklama olmadigindan minimum; provider tarafinda sifreleme beklenir.
-- Secret storage:
-  Sadece server-side environment degiskenleri.
+- In transit:
+  HTTPS/TLS required in production.
+- At rest:
+  Minimal storage by default.
+- Secrets:
+  Env variables only.
 - Data minimization:
-  Formda yalnizca gerekli alanlar toplanir.
+  Collect only required contact fields.
 
-## 4. Dependency and Supply Chain Security
+## 4. Dependency and Supply Chain
 
-- Dependency update cadence:
-  Aylik rutin + kritik acikta acil patch.
-- Vulnerability scanning tool:
-  `npm audit` veya benzeri CI taramasi.
-- License policy:
-  Izin verilen lisanslar acikca listelenecek.
-- Lockfile policy:
-  Lockfile repoda tutulacak ve CI'de dogrulanacak.
+- Update cadence:
+  Monthly routine, immediate action for critical vulnerabilities.
+- Scanning baseline:
+  CLI/CI dependency audit checks.
+- Lockfile discipline:
+  Keep deterministic installs in repository workflow.
 
 ## 5. Logging, Monitoring, and Alerting
 
-- Security event logging:
-  Contact endpoint hata kodlari, rate limit hit olaylari.
-- Alert channels:
-  E-posta veya deploy platform bildirimleri.
-- Incident severity levels:
+- Track:
+  Contact request outcomes and rate-limit events.
+- Alert channel:
+  Platform notifications and/or email.
+- Severity levels:
   `Sev1`, `Sev2`, `Sev3`.
-- Mean time to detect target:
-  Kritik sorunlarda 24 saat icinde fark edilme hedefi.
 
 ## 6. Incident Response
 
 | Phase | Owner | SLA | Notes |
 | --- | --- | --- | --- |
-| Detection | Site sahibi | 24h | Hata/artis trendlerini izle |
-| Triage | Site sahibi | 24h | Etki alani ve risk seviyesini belirle |
-| Containment | Site sahibi | 48h | Endpoint sinirla, anahtar yenile |
-| Recovery | Site sahibi | 72h | Duzeltme deployu ve dogrulama |
-| Postmortem | Site sahibi | 7 gun | Kisa ozet + aksiyon listesi |
+| Detection | Owner | 24h | Detect abnormal error/failure trends |
+| Triage | Owner | 24h | Assess blast radius and severity |
+| Containment | Owner | 48h | Temporarily restrict endpoint / rotate secrets |
+| Recovery | Owner | 72h | Patch and redeploy |
+| Postmortem | Owner | 7 days | Record cause, timeline, prevention actions |
 
 ## 7. Security Testing Plan
 
 - [ ] SAST on pull requests.
-- [ ] Dependency vulnerability scan in CI.
-- [ ] Security headers validation.
-- [ ] Basic DAST against staging.
-- [ ] Manual abuse-case review before release.
+- [ ] Dependency scanning in CI.
+- [ ] Security header verification.
+- [ ] Basic staging abuse-case tests.
+- [ ] Manual pre-release security review.
 
-## 8. Compliance and Privacy
+## 8. Privacy
 
-- Legal requirements:
-  KVKK/GDPR kapsaminda minimum veri toplama prensibi.
-- Privacy notice coverage:
-  Iletisim formunda verinin hangi amacla kullanildigi aciklanacak.
-- Data deletion process:
-  Kalici kayit varsa talep halinde manuel silme.
-- Cookie/consent model:
-  Zorunlu olmayan takip cookie'leri kullanilmayacak.
+- Data intent notice:
+  Contact form explains purpose of collected data.
+- Deletion model:
+  If retained, delete on request.
+- Cookies:
+  No non-essential tracking cookies by default.
 
 ## 9. Exceptions and Risk Acceptance
 
-| Exception | Justification | Expiry Date | Approver |
+| Exception | Justification | Expiry | Approver |
 | --- | --- | --- | --- |
 | `None` | `N/A` | `N/A` | `N/A` |
 
 ## 10. Open Actions
 
-- [ ] Contact endpoint'i icin nihai rate limit degerini belirle.
-- [ ] Email provider secimini tamamla ve yedek plani netlestir.
-- [ ] Privacy metnini yayina hazirla.
+- [ ] Finalize production security header configuration.
+- [ ] Validate abuse-case thresholds with real traffic assumptions.
+- [ ] Confirm provider fallback behavior for email outages.

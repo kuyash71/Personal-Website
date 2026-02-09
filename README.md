@@ -1,39 +1,55 @@
 # Personal Website
 
-This repository contains the modular skeleton for a personal website.
+This repository contains a modular personal website with built-in multi-language support.
 
 ## Product Scope (v0.1)
 
-- Navbar: `Anasayfa / Güneş Üçlemesi / Projeler / İletişim`
+- Primary navigation: `Home / Sun Trilogy / Projects / Contact`
 - CV-style homepage
-- `Güneş Üçlemesi` section marked as WIP
+- `Sun Trilogy` section marked as WIP
 - Projects page with GitHub repository links
 - Contact form flow via `POST /api/contact`
 - No login/sign-up in v1
 
+## Localization
+
+- Supported locales: `tr` and `en`
+- Locale-based routes:
+  - `/{locale}`
+  - `/{locale}/sun-trilogy`
+  - `/{locale}/projects`
+  - `/{locale}/contact`
+- Default routing behavior:
+  - `/` redirects to `/tr`
+  - Legacy Turkish slugs are redirected to canonical localized routes by `middleware.ts`
+
 ## Current Tech Skeleton
 
 - `src/app`: Route-level pages and API routes
+- `src/i18n`: Locale configuration and translation dictionaries
 - `src/components`: Shared UI/layout components
-- `src/content`: Versioned site content
-- `src/lib`: Validation, security, and constants
+- `src/content`: Locale-based content data
+- `src/lib`: Validation, security, integrations, and constants
 - `src/types`: Shared TypeScript contracts
 - `docs`: Architecture, content, security, and setup docs
 
-## Routes
+## API Routes
 
-- `/` -> `Anasayfa`
-- `/gunes-uclemesi` -> `Güneş Üçlemesi` (WIP)
-- `/projeler` -> `Projeler`
-- `/iletisim` -> `İletişim`
 - `/api/health` -> health check
 - `/api/contact` -> contact submission endpoint
 
+## Runtime and Tooling
+
+- Node.js is pinned to major `22` via `.nvmrc` and `.node-version`
+- `package.json` engines:
+  - `node: 22.x`
+  - `pnpm: 9.x`
+
 ## Environment
 
-Copy `.env.example` to `.env.local` and set values before testing contact delivery.
-Current API skeleton supports `EMAIL_PROVIDER=resend`.
+Copy `.env.example` to `.env.local` and set required values before testing contact delivery.
+Current email pipeline supports `EMAIL_PROVIDER=resend`.
 
 ## Next Step
 
-After skeleton review, we can implement final UI design and email provider integration.
+After this skeleton baseline, the next phase is production-grade UI polish and end-to-end contact delivery verification in both locales.

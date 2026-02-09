@@ -24,7 +24,7 @@ async function sendWithResend(payload: ContactPayload): Promise<SendResult> {
   if (!apiKey || !toEmail || !fromEmail) {
     return {
       ok: false,
-      message: "Resend icin EMAIL_API_KEY, CONTACT_TO_EMAIL ve EMAIL_FROM gerekli."
+      message: "Resend requires EMAIL_API_KEY, CONTACT_TO_EMAIL, and EMAIL_FROM."
     };
   }
 
@@ -47,7 +47,7 @@ async function sendWithResend(payload: ContactPayload): Promise<SendResult> {
     const errorText = await response.text();
     return {
       ok: false,
-      message: `Resend istegi basarisiz: ${response.status} ${errorText}`
+      message: `Resend request failed: ${response.status} ${errorText}`
     };
   }
 
@@ -58,12 +58,12 @@ export async function sendContactEmail(payload: ContactPayload): Promise<SendRes
   const provider = process.env.EMAIL_PROVIDER;
 
   if (!provider) {
-    return { ok: false, message: "EMAIL_PROVIDER tanimli degil." };
+    return { ok: false, message: "EMAIL_PROVIDER is not configured." };
   }
 
   if (provider === "resend") {
     return sendWithResend(payload);
   }
 
-  return { ok: false, message: `Desteklenmeyen EMAIL_PROVIDER: ${provider}` };
+  return { ok: false, message: `Unsupported EMAIL_PROVIDER: ${provider}` };
 }

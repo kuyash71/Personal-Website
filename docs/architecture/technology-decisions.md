@@ -10,42 +10,44 @@
 | Last Updated | `2026-02-09` |
 | Version | `v0.1.0` |
 
-## 1. Amaç
+## 1. Objective
 
-Bu dokuman, projede kullanilan yazilimlari, neden secildiklerini ve hangi probleme cevap verdiklerini netlestirir.
+Document why each core technology was selected and which problem it solves.
 
-## 2. Teknoloji Secimleri
+## 2. Technology Choices
 
-| Yazilim / Teknoloji | Kategori | Neden Secildi | Not |
+| Technology | Category | Why It Was Chosen | Notes |
 | --- | --- | --- | --- |
-| `Next.js 15` | Web framework | App Router ile moduler route yapisi, SSR/SSG esnekligi, tek kod tabaninda web + API endpoint | Kisisel site icin hizli gelistirme |
-| `React 19` | UI kutuphanesi | Bilesen tabanli gelistirme, yeniden kullanilabilirlik, Next.js ile dogal uyum | UI katmaninin temeli |
-| `TypeScript 5` | Tip guvenligi | Veri kontratlarini (`Profile`, `Project`, `ContactPayload`) compile-time kontrol eder | Refactor riskini azaltir |
-| `ESLint` + `eslint-config-next` | Kod kalitesi | Hata yakalama, standart kod stili, Next.js best-practice uyumu | `strict` yaklasimi desteklenir |
-| `pnpm` | Paket yonetimi | Hizli kurulum, verimli disk kullanimi, lockfile ile deterministik bagimlilik | Gelistirme ve CI akisinda kullanilir |
-| `Resend API` (provider: `resend`) | E-posta gonderimi | Contact form mesaji icin sade HTTP API, server-side entegrasyon kolayligi | `EMAIL_PROVIDER=resend` |
+| `Next.js 15` | Web framework | App Router modularity, server + API support in one codebase | Strong fit for portfolio sites |
+| `React 19` | UI layer | Component-based composition and broad ecosystem support | Foundation of all UI modules |
+| `TypeScript 5` | Type safety | Enforces content and API contracts at compile time | Reduces refactor risk |
+| `ESLint` + `eslint-config-next` | Code quality | Catches issues early and enforces consistent standards | Strict lint workflow |
+| `pnpm` | Package manager | Fast installs and deterministic dependency management | Preferred local + CI workflow |
+| `Resend API` | Email provider | Simple server-side delivery for contact submissions | Configurable via env |
+| `Middleware locale routing` | Internationalization infrastructure | Guarantees locale-prefixed navigation and legacy slug redirects | Enables smooth TR/EN UX |
 
-## 3. Mimari Ilke Uyumu
+## 3. Architecture Principle Alignment
 
-- Modulerlik:
-  Next.js route bazli yapi sayesinde yeni bolumler (`/blog`, `/forum`) sonradan bagimsiz eklenebilir.
-- Bakim kolayligi:
-  TypeScript + ESLint kombinasyonu teknik borcun erken birikmesini engeller.
-- Guvenlik ve operasyon:
-  Contact API icin server-side validasyon, honeypot ve rate-limit katmanlari uygulanabilir.
+- Modularity:
+  App Router and locale segments allow clean feature expansion.
+- Maintainability:
+  TypeScript + ESLint keeps architecture and contracts consistent.
+- Security/operations:
+  Contact API remains server-side with explicit validation and rate controls.
 
-## 4. Opsiyonel Gelecek Teknolojiler
+## 4. Optional Future Additions
 
-| Aday | Ne zaman gerekir | Etki |
+| Candidate | When Needed | Impact |
 | --- | --- | --- |
-| `Vitest` veya `Jest` | Unit/integration testler yazilmaya baslandiginda | Test guvencesi artar |
-| `Playwright` | E2E akislar (form, navbar, route gecisleri) onem kazandiginda | Gercek tarayici testi eklenir |
-| `Sentry` | Production hata gorunurlugu ihtiyaci arttiginda | Hata izleme merkezi hale gelir |
-| `i18n` kutuphanesi | TR/EN coklu dil gereksinimi netlestiginde | Icerik yonetimi standardize olur |
+| `Vitest` or `Jest` | Unit/integration expansion | Improves regression safety |
+| `Playwright` | Reliable browser-level E2E coverage | Verifies localized routing + form flows |
+| `Sentry` | Production observability needs increase | Centralized error monitoring |
+| `next-intl` or equivalent | If localization complexity scales | Structured translation management |
 
-## 5. Karar Ozeti
+## 5. Decision Summary
 
-- Cekirdek stack: `Next.js + React + TypeScript`
-- Kalite bari: `ESLint (Next uyumlu)`
-- Paket yonetimi: `pnpm`
-- Contact iletimi: `Resend` (env tabanli provider secimi)
+- Core stack: `Next.js + React + TypeScript`
+- Code quality baseline: `ESLint` with Next rules
+- Package management: `pnpm`
+- Contact transport: `Resend` provider path
+- Localization architecture: `/{locale}` route model with middleware normalization

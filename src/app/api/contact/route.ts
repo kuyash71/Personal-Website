@@ -32,7 +32,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   if (!allowed) {
     return NextResponse.json(
-      { ok: false, message: "Cok fazla istek. Lutfen daha sonra tekrar deneyin." },
+      { ok: false, message: "Too many requests. Please try again later." },
       { status: 429 }
     );
   }
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   if (!validation.ok) {
     return NextResponse.json(
-      { ok: false, message: "Dogrulama hatasi", errors: validation.errors },
+      { ok: false, message: "Validation error", errors: validation.errors },
       { status: 400 }
     );
   }
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json(
       {
         ok: false,
-        message: "Mesaj alindi ancak email teslimi basarisiz.",
+        message: "Message accepted, but email delivery failed.",
         detail: sendResult.message
       },
       { status: 503 }
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   return NextResponse.json(
     {
       ok: true,
-      message: "Mesaj alindi ve e-posta olarak iletildi.",
+      message: "Message accepted and forwarded by email.",
       accepted: true
     },
     { status: 202 }

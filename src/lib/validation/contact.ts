@@ -22,23 +22,23 @@ export function validateContactPayload(input: Record<string, unknown>): ContactV
   const errors: string[] = [];
 
   if (!data.name || data.name.length < 2) {
-    errors.push("Gecerli bir ad giriniz.");
+    errors.push("Please provide a valid name.");
   }
 
   if (!data.email || !EMAIL_REGEX.test(data.email)) {
-    errors.push("Gecerli bir e-posta giriniz.");
+    errors.push("Please provide a valid email address.");
   }
 
   if (!data.subject || data.subject.length < 3) {
-    errors.push("Konu en az 3 karakter olmalidir.");
+    errors.push("Subject must be at least 3 characters.");
   }
 
   if (!data.message || data.message.length < 10) {
-    errors.push("Mesaj en az 10 karakter olmalidir.");
+    errors.push("Message must be at least 10 characters.");
   }
 
   if (data.website) {
-    errors.push("Gecersiz istek.");
+    errors.push("Invalid request.");
   }
 
   if (errors.length > 0) {

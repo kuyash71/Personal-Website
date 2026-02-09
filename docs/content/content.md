@@ -1,4 +1,4 @@
-# Content Strategy - Personal Website
+# Content Strategy
 
 ## Document Control
 
@@ -13,118 +13,103 @@
 ## 1. Content Goals
 
 - Primary goal:
-  Kişisel markayi net bir profil + proje vitrini olarak sunmak.
+  Present a clear personal brand and technical portfolio.
 - Secondary goals:
-  - Güneş Üçlemesi markasini erken asamada konumlandirmak.
-  - Potansiyel is birligi/iletisim taleplerini e-posta uzerinden toplamak.
+  - Introduce the Sun Trilogy world-building initiative.
+  - Capture collaboration and outreach messages via contact form.
 - Target audience:
-  Isverenler, teknik ekipler, is birligi arayan kisiler, fantastik kurgu meraklilari.
+  Recruiters, engineering peers, collaborators, and fantasy readers.
 - Core message:
-  "Teknik projeler ureten ve kendi fantastik evrenini insa eden bir gelistirici."
+  "A developer building software projects while creating original fantasy universes."
 
-## 2. Information Architecture
+## 2. Information Architecture (Localized)
 
-| Route | Nav Label | Intent | Primary CTA |
-| --- | --- | --- | --- |
-| `/` | `Anasayfa` | Kişisel profil ve CV ozetini anlatmak | `Projeleri Incele` |
-| `/gunes-uclemesi` | `Güneş Üçlemesi` | 3 fantastik evren icin marka alanini acmak (WIP) | `Yakinda` |
-| `/projeler` | `Projeler` | Yazilim projelerini ve repo linklerini gostermek | `GitHub Repo` |
-| `/iletisim` | `İletişim` | Ziyaretcinin form ile e-posta gonderebilmesi | `Mesaj Gonder` |
+| Route | Nav Label (`en`) | Nav Label (`tr`) | Intent | Primary CTA |
+| --- | --- | --- | --- | --- |
+| `/{locale}` | `Home` | `Anasayfa` | Present profile and CV summary | `View Projects` |
+| `/{locale}/sun-trilogy` | `Sun Trilogy` | `Gunes Uclemesi` | Establish trilogy module as evolving WIP | `Coming Soon` |
+| `/{locale}/projects` | `Projects` | `Projeler` | Showcase software projects and repos | `GitHub Repo` |
+| `/{locale}/contact` | `Contact` | `Iletisim` | Enable direct outreach | `Send Message` |
 
 ## 3. Page-Level Content Brief
 
-### 3.1 Anasayfa
+### 3.1 Home
 
-- Hero title:
-  Ad + kisa unvan.
-- Hero subtitle:
-  "Yazilim projeleri gelistiriyor ve Güneş Üçlemesi evrenini insa ediyorum."
-- Key proof points:
-  - Teknik stack ve uzmanlik alanlari
-  - One cikan proje sayisi
-  - Kisa gecmis/deneyim
-- CTA text:
-  `Projeleri Incele` ve `İletişime Gec`
+- Hero:
+  Name + concise role line.
+- Summary:
+  A short profile statement tailored by locale.
+- Supporting sections:
+  Skills and external links.
 
-### 3.2 Güneş Üçlemesi
+### 3.2 Sun Trilogy
 
-- Section objective:
-  3 fantastik evren icin temel tanitim iskeleti sunmak.
-- Card/list structure:
-  - 3 kart (Evren I, Evren II, Evren III)
-  - Her kartta ad, tek cumle tanim, `WIP` etiketi
-- Supporting media:
-  Kapak gorseli opsiyonel, ilk surumde zorunlu degil.
+- Objective:
+  Keep narrative initiative visible while content is in progress.
+- Structure:
+  Three cards (Universe I/II/III) with WIP status.
 
-### 3.3 Projeler
+### 3.3 Projects
 
-- Project card schema:
-  - Proje adi
-  - Kisa aciklama
-  - Teknolojiler
-  - GitHub repo linki
-  - Opsiyonel canli demo linki
-- Featured projects:
-  Elle secilen one cikan 3-6 proje.
-- Technical depth level:
-  Teknik detay orta seviye; ziyaretciyi repoya yonlendirecek kadar net.
+- Card schema:
+  Name, summary, stack, GitHub link, status.
+- Depth target:
+  Medium technical detail that drives repository clicks.
 
-### 3.4 İletişim
+### 3.4 Contact
 
 - Form fields:
   `name`, `email`, `subject`, `message`
-- Validation copy:
-  Alan bazli anlasilir hata mesajlari.
-- Success state:
-  "Mesajin ulasti, en kisa surede donus yapacagim."
-- Failure state:
-  "Mesaj gonderilemedi, lutfen tekrar dene."
+- UX states:
+  Clear validation + success/failure messaging.
 
 ## 4. Tone and Style Guide
 
-- Brand voice (3 adjectives):
-  `samimi`, `net`, `uretken`
+- Voice:
+  `clear`, `practical`, `original`
 - Do:
-  Kisa cumleler, somut bilgi, teknik dogruluk.
+  Keep copy concise and specific.
 - Avoid:
-  Asiri pazarlama dili, belirsiz iddialar, uzun paragraflar.
-- Reading level target:
-  Genel teknik okur kitlesine uygun sade dil.
+  Generic marketing language and vague claims.
 - Language support:
-  Ilk surum: Turkce. Gelecek: Turkce + Ingilizce opsiyonu.
+  Turkish (`tr`) + English (`en`) from v0.1 onward.
+- Language switch UX:
+  Navbar exposes `TR` and `EN` controls and preserves the current page while changing locale.
 
 ## 5. SEO Metadata Plan
 
-| Page | Title Tag | Meta Description | Primary Keyword | OG Image |
-| --- | --- | --- | --- | --- |
-| `/` | `Kuyash | Kişisel Website` | `Kuyash'in CV tarzi profili, teknik yetkinlikleri ve one cikan projeleri.` | `kisisel website` | `/images/og-home.png` |
-| `/gunes-uclemesi` | `Güneş Üçlemesi | WIP` | `Uc fantastik evrenden olusan Güneş Üçlemesi projesinin ilk tanitim alani.` | `gunes uclemesi` | `/images/og-sun-trilogy.png` |
-| `/projeler` | `Projeler | Kuyash` | `Geliştirilen yazilim projeleri, teknik yiginlar ve GitHub repo baglantilari.` | `yazilim projeleri` | `/images/og-projects.png` |
-| `/iletisim` | `İletişim | Kuyash` | `Website uzerinden dogrudan e-posta gondermek icin iletisim formu.` | `iletisim formu` | `/images/og-contact.png` |
+| Route | Locale | Title | Description |
+| --- | --- | --- | --- |
+| `/{locale}` | `tr` | `Kuyash | Kisisel Website` | `Kisisel profil, teknik yetkinlikler ve one cikan projeler.` |
+| `/{locale}` | `en` | `Kuyash | Personal Website` | `Personal profile, technical strengths, and featured projects.` |
+| `/{locale}/sun-trilogy` | `tr` | `Gunes Uclemesi | WIP` | `Uc fantastik evrenden olusan proje alani.` |
+| `/{locale}/sun-trilogy` | `en` | `Sun Trilogy | WIP` | `An evolving project space for three connected fantasy universes.` |
+| `/{locale}/projects` | `tr` | `Projeler | Kuyash` | `Yazilim projeleri ve GitHub baglantilari.` |
+| `/{locale}/projects` | `en` | `Projects | Kuyash` | `Software projects and GitHub repository links.` |
+| `/{locale}/contact` | `tr` | `Iletisim | Kuyash` | `Web formu ile dogrudan ulasim.` |
+| `/{locale}/contact` | `en` | `Contact | Kuyash` | `Direct outreach via website contact form.` |
 
 ## 6. Content Operations
 
 - Source of truth:
-  `src/content` altindaki versionlanmis veri dosyalari.
-- Review cycle:
-  Aylik icerik kontrolu.
-- Approval workflow:
-  Tek kisi (site sahibi) onayi.
-- Publishing checklist:
-  Yazim, link, gorsel ve tarih kontrolu.
-- Localization process:
-  V2 icin i18n yapisina gecis plani.
+  `src/content/*` and `src/i18n/messages.ts`
+- Review cadence:
+  Monthly content pass.
+- Approval:
+  Owner-managed in v1.
+- Localization workflow:
+  New content requires simultaneous TR and EN updates.
 
 ## 7. Accessibility Checklist
 
-- [ ] Headings follow semantic order.
+- [ ] Headings follow semantic hierarchy.
 - [ ] Images include meaningful alt text.
-- [ ] Links have descriptive labels.
-- [ ] Color contrast meets WCAG AA.
-- [ ] Motion has reduced-motion fallback.
+- [ ] Links are descriptive.
+- [ ] Contrast meets WCAG AA.
+- [ ] Motion has reduced-motion fallback where needed.
 
 ## 8. Open Items
 
-- [ ] Güneş Üçlemesi kartlari icin final adlar ve birer satirlik sloganlar.
-- [ ] One cikan projeler icin ilk liste ve sira.
-- [ ] Ana sayfa hero metninin son hali.
+- [ ] Final naming + tagline polish for all trilogy cards.
+- [ ] Final featured project order and selection.
+- [ ] Locale-aware UI response handling for contact success/failure.

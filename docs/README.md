@@ -1,36 +1,38 @@
 # Documentation Index
 
-Bu klasor, kisisel web sitesi icin canli dokumanlari icerir.
-`Owner`, `Last Updated` ve `Status` alanlarini her buyuk degisiklikte guncelle.
+This folder contains living documentation for the personal website.
+Update `Owner`, `Last Updated`, and `Status` fields after major changes.
 
 ## Document Map
 
 | Path | Purpose |
 | --- | --- |
-| `docs/architecture/architecture.md` | Bilgi mimarisi, moduler sistem tasarimi, route yapisi ve teknik kararlar |
-| `docs/architecture/technology-decisions.md` | Kullanilan yazilimlarin secim gerekceleri ve karar ozeti |
-| `docs/architecture/technology-usage-map.md` | Yazilimlarin proje icinde nerede kullanildiginin dosya bazli haritasi |
-| `docs/content/content.md` | Sayfa bazli icerik plani, navbar akisi, metin tonu ve SEO stratejisi |
-| `docs/security/security.md` | Contact endpoint guvenligi, tehdit modeli ve temel kontroller |
-| `docs/setup/setup.md` | Kurulum, ortam degiskenleri, CI/CD ve operasyon adimlari |
+| `docs/architecture/architecture.md` | System architecture, localization model, and technical decisions |
+| `docs/architecture/technology-decisions.md` | Rationale behind technology choices |
+| `docs/architecture/technology-usage-map.md` | File-level map of where each technology is used |
+| `docs/content/content.md` | Page-level content plan, messaging, and SEO strategy |
+| `docs/security/security.md` | Security baseline and contact endpoint controls |
+| `docs/setup/setup.md` | Setup, environment, CI/CD, and release operations |
 
 ## Current Product Model (v0.1)
 
-- Navbar:
-  `Anasayfa / Güneş Üçlemesi / Projeler / İletişim`
-- Product scope:
-  - CV tarzinda ana sayfa
-  - Güneş Üçlemesi (WIP)
-  - Projeler + GitHub repo linkleri
-  - İletişim formu ile e-posta gonderimi
+- Navigation:
+  `Home / Sun Trilogy / Projects / Contact`
+- Core scope:
+  - CV-style homepage
+  - Sun Trilogy (WIP)
+  - Projects with GitHub links
+  - Contact form with email delivery
 - Out of scope (v1):
-  Login/sign up, forum/blog
-- Future direction:
-  Blog/forum gibi yeni bolumler moduler route yapisiyla sonradan eklenebilir.
+  - Login/sign-up
+  - Forum/blog modules
+- Multi-language support:
+  - Turkish (`tr`) and English (`en`)
+  - Locale-based routing under `/{locale}`
 
 ## Documentation Standards
 
-- Gereksinimleri test edilebilir ve acik ifadelerle yaz.
-- Mumkunse gereksinimleri kod dosyalariyla eslestir.
-- Kritik teknik kararlari tarih ve gerekce ile kaydet.
-- Release oncesi guvenlik ve setup dokumanlarini birlikte gozden gecir.
+- Use clear, testable statements.
+- Link requirements to implementation files where possible.
+- Track major decisions with date + rationale.
+- Review setup and security docs before each release.
