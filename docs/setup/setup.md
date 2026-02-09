@@ -82,14 +82,25 @@ pnpm run dev
   GitHub Actions
 - Required checks:
   `lint`, `test`, `build`, `security scan`
-- Workflow file:
-  `.github/workflows/ci.yml`
+- Workflow files:
+  `.github/workflows/ci.yml`, `.github/workflows/preview.yml`
 - Deployment targets:
   Preview + production
 - Rollback strategy:
   Re-deploy last stable release
 
-### 6.1 Versioning Convention
+### 6.1 Preview Deployment Flow
+
+- Provider:
+  Vercel Preview Deployments via GitHub Actions
+- Trigger:
+  Pull requests targeting `main`
+- Behavior:
+  Deploys preview and posts URL as a PR comment
+- Required GitHub repository secrets:
+  `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`
+
+### 6.2 Versioning Convention
 
 - 1st index (`1.0`, `2.0`, `3.0`):
   Major updates. MVP completion target is `1.0`.

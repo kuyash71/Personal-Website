@@ -39,7 +39,7 @@ Map each selected technology to concrete files and runtime layers.
 | Type checking | TypeScript | `tsconfig.json` |
 | Linting | ESLint + Next config | `.eslintrc.json`, `package.json` |
 | Test runner | Vitest | `vitest.config.ts`, `package.json`, `tests/unit/*` |
-| Continuous Integration | GitHub Actions | `.github/workflows/ci.yml` |
+| Continuous Integration | GitHub Actions | `.github/workflows/ci.yml`, `.github/workflows/preview.yml` |
 | Runtime secrets | Environment variables | `.env.example`, `docs/setup/setup.md` |
 
 ## 4. Contact Flow Trace
