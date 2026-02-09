@@ -49,6 +49,10 @@ This repository contains a modular personal website with built-in multi-language
   - `pnpm run test:watch` (Vitest watch mode)
   - `pnpm run test:e2e` (Playwright smoke E2E tests)
   - `pnpm run test:e2e:install` (installs Playwright Chromium browser)
+- Environment checks:
+  - `pnpm run verify:env` (validates `.env.local` contract)
+  - `pnpm run verify:env:prod` (validates exported production env contract)
+  - `pnpm run verify:env:prod:file` (validates `.env.production.local` contract)
 
 ## Environment
 

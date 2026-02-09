@@ -72,6 +72,9 @@ pnpm run test:e2e:install
 | `pnpm run test:e2e` | Run Playwright smoke E2E tests | Before release / navigation checks |
 | `pnpm run test:e2e:ui` | Run Playwright with UI mode | Local debugging |
 | `pnpm run build` | Production build verification | Before release |
+| `pnpm run verify:env` | Validate local `.env.local` contract | Before local QA and integration testing |
+| `pnpm run verify:env:prod` | Validate production env values from runtime/exported env | Before production deploy |
+| `pnpm run verify:env:prod:file` | Validate `.env.production.local` contract | Before production deploy |
 
 ## 5. Development Workflow
 
@@ -152,9 +155,20 @@ pnpm run test:e2e:install
 - `main` branch CI is green:
   `lint`, `test`, `build`, `e2e smoke`, `security scan`.
 - Production environment variables are configured in Vercel:
-  `CONTACT_TO_EMAIL`, `EMAIL_PROVIDER`, `EMAIL_API_KEY`, `EMAIL_FROM`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_MAX_REQUESTS`.
+  `CONTACT_TO_EMAIL`, `EMAIL_PROVIDER`, `EMAIL_API_KEY`, `EMAIL_FROM`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_MAX_REQUESTS`, `CONTACT_MAX_PAYLOAD_BYTES` (optional, defaults to `10000`).
 - Latest PR preview is reviewed for:
   `/{locale}` routing, navbar links, and contact form behavior.
+
+### 10.1.1 Environment Verification Procedure
+
+- Local contract validation:
+  run `pnpm run verify:env` and confirm `[OK] Environment verification passed.`
+- Production contract validation:
+  run `pnpm run verify:env:prod` in an environment where production values are exported.
+- Production file validation (recommended local flow):
+  `vercel env pull .env.production.local --environment=production` then run `pnpm run verify:env:prod:file`.
+- Fail criteria:
+  any missing required variable, unsupported provider, invalid sender/recipient format, or invalid numeric limits.
 
 ### 10.2 Deployment Trigger
 

@@ -16,20 +16,24 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:install": "playwright install --with-deps chromium"
+    "test:e2e:install": "playwright install --with-deps chromium",
+    "verify:env": "node scripts/verify-env.mjs --file .env.local --target=development",
+    "verify:env:prod": "node scripts/verify-env.mjs --target=production",
+    "verify:env:prod:file": "node scripts/verify-env.mjs --file .env.production.local --target=production"
   },
   "dependencies": {
     "next": "15.2.9",
     "react": "19.1.1",
-    "react-dom": "19.1.1"
+    "react-dom": "19.1.1",
+    "vercel": "^50.13.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.51.1",
     "@types/node": "22.10.2",
     "@types/react": "19.0.2",
     "@types/react-dom": "19.0.2",
     "eslint": "^8.57.1",
     "eslint-config-next": "15.2.9",
-    "@playwright/test": "^1.51.1",
     "typescript": "5.7.2",
     "vitest": "^2.1.8"
   }
