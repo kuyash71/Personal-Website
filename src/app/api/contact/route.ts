@@ -40,6 +40,7 @@ const apiMessages: Record<
   Locale,
   {
     tooManyRequests: string;
+    payloadTooLarge: string;
     unsupportedContentType: string;
     invalidBody: string;
     validationError: string;
@@ -49,6 +50,7 @@ const apiMessages: Record<
 > = {
   tr: {
     tooManyRequests: "Cok fazla istek. Lutfen daha sonra tekrar deneyin.",
+    payloadTooLarge: "Istek govdesi cok buyuk. Daha kisa bir mesaj deneyin.",
     unsupportedContentType:
       "Desteklenmeyen Content-Type. application/json, multipart/form-data veya application/x-www-form-urlencoded kullanin.",
     invalidBody: "Gecersiz istek govdesi formati.",
@@ -58,6 +60,7 @@ const apiMessages: Record<
   },
   en: {
     tooManyRequests: "Too many requests. Please try again later.",
+    payloadTooLarge: "Request payload is too large. Please send a shorter message.",
     unsupportedContentType:
       "Unsupported Content-Type. Use application/json, multipart/form-data, or application/x-www-form-urlencoded.",
     invalidBody: "Invalid request body format.",
@@ -121,9 +124,25 @@ function resolveRequestLocale(request: NextRequest, payload?: Record<string, unk
   return getLocaleFromAcceptLanguage(request) ?? defaultLocale;
 }
 
+function getPayloadLimitBytes(): number {
+  const parsed = Number(process.env.CONTACT_MAX_PAYLOAD_BYTES ?? 10000);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 10000;
+}
+
+function getContentLengthBytes(request: NextRequest): number | null {
+  const value = request.headers.get("content-length");
+  if (!value) {
+    return null;
+  }
+
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
+}
+
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const rateLimitWindow = Number(process.env.RATE_LIMIT_WINDOW_MS ?? 600000);
   const rateLimitMax = Number(process.env.RATE_LIMIT_MAX_REQUESTS ?? 5);
+  const payloadLimitBytes = getPayloadLimitBytes();
 
   const ipKey = getClientIp(request);
   const allowed = isAllowedByRateLimit(ipKey, rateLimitWindow, rateLimitMax);
@@ -134,6 +153,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json(
       { ok: false, message: fallbackMessages.tooManyRequests },
       { status: 429 }
+    );
+  }
+
+  const contentLength = getContentLengthBytes(request);
+  if (contentLength !== null && contentLength > payloadLimitBytes) {
+    return NextResponse.json(
+      { ok: false, message: fallbackMessages.payloadTooLarge },
+      { status: 413 }
     );
   }
 
@@ -152,7 +179,17 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   try {
     if (isJsonContentType(contentType)) {
-      payload = (await request.json()) as Record<string, unknown>;
+      const rawBody = await request.text();
+      const rawBodyBytes = new TextEncoder().encode(rawBody).length;
+
+      if (rawBodyBytes > payloadLimitBytes) {
+        return NextResponse.json(
+          { ok: false, message: fallbackMessages.payloadTooLarge },
+          { status: 413 }
+        );
+      }
+
+      payload = JSON.parse(rawBody) as Record<string, unknown>;
     } else {
       const formData = await request.formData();
       payload = parseFormData(formData);

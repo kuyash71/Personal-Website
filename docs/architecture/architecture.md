@@ -214,6 +214,7 @@ Measurement policy:
   - `EMAIL_PROVIDER`
   - `EMAIL_API_KEY`
   - `EMAIL_FROM`
+  - `CONTACT_MAX_PAYLOAD_BYTES`
   - `RATE_LIMIT_WINDOW_MS`
   - `RATE_LIMIT_MAX_REQUESTS`
 
@@ -243,6 +244,7 @@ Measurement policy:
 | `2026-02-09` | Production deploy and rollback runbooks documented in setup docs | `accepted` | `docs/setup/setup.md` |
 | `2026-02-09` | Release-based performance targets documented (`1.0`/`1.1`/`1.1a+`) | `accepted` | `docs/architecture/architecture.md` |
 | `2026-02-09` | Strict lint baseline documented as merge gate | `accepted` | `docs/setup/setup.md` |
+| `2026-02-09` | Contact API payload size limit enforced via `CONTACT_MAX_PAYLOAD_BYTES` | `accepted` | `src/app/api/contact/route.ts` |
 
 ## 14. Open Questions
 

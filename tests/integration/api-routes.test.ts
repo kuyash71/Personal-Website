@@ -12,17 +12,20 @@ const mockedSendContactEmail = vi.mocked(sendContactEmail);
 
 const originalRateLimitWindow = process.env.RATE_LIMIT_WINDOW_MS;
 const originalRateLimitMax = process.env.RATE_LIMIT_MAX_REQUESTS;
+const originalContactMaxPayloadBytes = process.env.CONTACT_MAX_PAYLOAD_BYTES;
 
 function createJsonContactRequest({
   ip,
   payload,
   localeQuery,
-  acceptLanguage
+  acceptLanguage,
+  contentLength
 }: {
   ip: string;
   payload: Record<string, unknown>;
   localeQuery?: "tr" | "en";
   acceptLanguage?: string;
+  contentLength?: number;
 }): NextRequest {
   const url = new URL("http://localhost:3000/api/contact");
   if (localeQuery) {
@@ -38,6 +41,10 @@ function createJsonContactRequest({
     headers.set("accept-language", acceptLanguage);
   }
 
+  if (typeof contentLength === "number") {
+    headers.set("content-length", String(contentLength));
+  }
+
   return new NextRequest(url, {
     method: "POST",
     headers,
@@ -48,6 +55,7 @@ function createJsonContactRequest({
 beforeEach(() => {
   process.env.RATE_LIMIT_WINDOW_MS = "600000";
   process.env.RATE_LIMIT_MAX_REQUESTS = "5";
+  process.env.CONTACT_MAX_PAYLOAD_BYTES = "10000";
   mockedSendContactEmail.mockReset();
   mockedSendContactEmail.mockResolvedValue({ ok: true });
 });
@@ -63,6 +71,12 @@ afterAll(() => {
     delete process.env.RATE_LIMIT_MAX_REQUESTS;
   } else {
     process.env.RATE_LIMIT_MAX_REQUESTS = originalRateLimitMax;
+  }
+
+  if (originalContactMaxPayloadBytes === undefined) {
+    delete process.env.CONTACT_MAX_PAYLOAD_BYTES;
+  } else {
+    process.env.CONTACT_MAX_PAYLOAD_BYTES = originalContactMaxPayloadBytes;
   }
 });
 
@@ -204,6 +218,32 @@ describe("POST /api/contact", () => {
     expect(body.ok).toBe(false);
     expect(body.message).toBe("Too many requests. Please try again later.");
     expect(mockedSendContactEmail).toHaveBeenCalledTimes(1);
+  });
+
+  it("returns 413 when content length exceeds payload limit", async () => {
+    process.env.CONTACT_MAX_PAYLOAD_BYTES = "64";
+
+    const response = await postContact(
+      createJsonContactRequest({
+        ip: "203.0.113.15",
+        localeQuery: "en",
+        contentLength: 200,
+        payload: {
+          name: "Kuyash",
+          email: "test@example.com",
+          subject: "Payload limit test",
+          message: "This payload should be rejected before parsing.",
+          website: ""
+        }
+      })
+    );
+
+    const body = (await response.json()) as { ok: boolean; message: string };
+
+    expect(response.status).toBe(413);
+    expect(body.ok).toBe(false);
+    expect(body.message).toBe("Request payload is too large. Please send a shorter message.");
+    expect(mockedSendContactEmail).not.toHaveBeenCalled();
   });
 
   it("returns 503 when provider fails", async () => {

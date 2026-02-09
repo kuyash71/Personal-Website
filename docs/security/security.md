@@ -49,6 +49,8 @@
   Restrict to intended method and origin-aware deployment defaults.
 - Rate limiting:
   IP-based windowing via `isAllowedByRateLimit`.
+- Payload size controls:
+  Contact endpoint rejects oversized request bodies using `CONTACT_MAX_PAYLOAD_BYTES`.
 
 ### 3.2 Authentication and Authorization
 
