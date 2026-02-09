@@ -18,6 +18,7 @@
   - Node.js: `22.x` (LTS)
   - Package manager: `pnpm 9.x` (or `npm 10.x`)
   - Git: `2.40+`
+  - Playwright browser runtime (Chromium for E2E smoke tests)
 - Version pinning sources:
   - `.nvmrc`: `22`
   - `.node-version`: `22`
@@ -41,6 +42,9 @@ cp .env.example .env.local
 
 # 4) Run development server
 pnpm run dev
+
+# 5) (Optional) Install browser for E2E smoke tests
+pnpm run test:e2e:install
 ```
 
 ## 3. Environment Variables
@@ -63,6 +67,9 @@ pnpm run dev
 | `pnpm run lint` | Static quality checks | Before commit |
 | `pnpm run test` | Run Vitest in CI mode | Before merge |
 | `pnpm run test:watch` | Run Vitest in watch mode | During feature development |
+| `pnpm run test:e2e:install` | Install Playwright Chromium browser | Initial setup / CI image prep |
+| `pnpm run test:e2e` | Run Playwright smoke E2E tests | Before release / navigation checks |
+| `pnpm run test:e2e:ui` | Run Playwright with UI mode | Local debugging |
 | `pnpm run build` | Production build verification | Before release |
 
 ## 5. Development Workflow
@@ -81,7 +88,7 @@ pnpm run dev
 - CI provider:
   GitHub Actions
 - Required checks:
-  `lint`, `test`, `build`, `security scan`
+  `lint`, `test`, `build`, `e2e smoke`, `security scan`
 - Workflow files:
   `.github/workflows/ci.yml`, `.github/workflows/preview.yml`
 - Deployment targets:

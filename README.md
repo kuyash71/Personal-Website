@@ -47,6 +47,8 @@ This repository contains a modular personal website with built-in multi-language
 - Automated tests:
   - `pnpm run test` (Vitest run mode)
   - `pnpm run test:watch` (Vitest watch mode)
+  - `pnpm run test:e2e` (Playwright smoke E2E tests)
+  - `pnpm run test:e2e:install` (installs Playwright Chromium browser)
 
 ## Environment
 

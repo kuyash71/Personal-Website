@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   quality:
-    name: Lint, Test, Build
+    name: Lint, Test, Build, E2E Smoke
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -44,6 +44,12 @@ jobs:
 
       - name: Build
         run: pnpm run build
+
+      - name: Install Playwright browser
+        run: pnpm run test:e2e:install
+
+      - name: E2E smoke tests
+        run: pnpm run test:e2e
 
   security:
     name: Security Audit
