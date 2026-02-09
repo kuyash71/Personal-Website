@@ -44,6 +44,9 @@ This repository contains a modular personal website with built-in multi-language
 - `package.json` engines:
   - `node: 22.x`
   - `pnpm: 9.x`
+- Automated tests:
+  - `pnpm run test` (Vitest run mode)
+  - `pnpm run test:watch` (Vitest watch mode)
 
 ## Environment
 

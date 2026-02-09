@@ -61,7 +61,8 @@ pnpm run dev
 | --- | --- | --- |
 | `pnpm run dev` | Start local development server | Daily development |
 | `pnpm run lint` | Static quality checks | Before commit |
-| `pnpm run test` | Automated tests | Before merge |
+| `pnpm run test` | Run Vitest in CI mode | Before merge |
+| `pnpm run test:watch` | Run Vitest in watch mode | During feature development |
 | `pnpm run build` | Production build verification | Before release |
 
 ## 5. Development Workflow

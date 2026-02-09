@@ -27,6 +27,7 @@ Map each selected technology to concrete files and runtime layers.
 | Validation | Utility module | `src/lib/validation/contact.ts` |
 | Rate limiting | Utility module | `src/lib/security/rate-limit.ts` |
 | Email integration | `fetch` + provider API | `src/lib/email/send-contact-email.ts` |
+| Automated tests | `Vitest` | `vitest.config.ts`, `tests/unit/contact-validation.test.ts` |
 | Styling | Global CSS | `src/app/globals.css` |
 
 ## 3. Toolchain and Runtime Controls
@@ -37,6 +38,7 @@ Map each selected technology to concrete files and runtime layers.
 | Node runtime pinning | Node 22 | `.nvmrc`, `.node-version`, `package.json -> engines` |
 | Type checking | TypeScript | `tsconfig.json` |
 | Linting | ESLint + Next config | `.eslintrc.json`, `package.json` |
+| Test runner | Vitest | `vitest.config.ts`, `package.json`, `tests/unit/*` |
 | Runtime secrets | Environment variables | `.env.example`, `docs/setup/setup.md` |
 
 ## 4. Contact Flow Trace

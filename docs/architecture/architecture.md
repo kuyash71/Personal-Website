@@ -223,6 +223,7 @@ Language switching (`TR`/`EN`) is available in the navbar and keeps users on the
 | `2026-02-09` | Custom 3-index versioning model adopted | `accepted` | `docs/architecture/architecture.md` |
 | `2026-02-09` | Locale-based routing for `tr`/`en` adopted | `accepted` | `docs/architecture/architecture.md` |
 | `2026-02-09` | Contact API responses are locale-aware (`tr`/`en`) | `accepted` | `docs/architecture/architecture.md` |
+| `2026-02-09` | Vitest adopted as baseline unit test framework | `accepted` | `docs/architecture/architecture.md` |
 
 ## 14. Open Questions
 
