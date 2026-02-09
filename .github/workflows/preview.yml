@@ -19,29 +19,44 @@ jobs:
     name: Vercel Preview
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    if: >-
-      secrets.VERCEL_TOKEN != '' &&
-      secrets.VERCEL_ORG_ID != '' &&
-      secrets.VERCEL_PROJECT_ID != '' &&
-      (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
 
     steps:
+      - name: Check Vercel secrets
+        id: vercel_secrets
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ] || [ -z "$VERCEL_ORG_ID" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "Vercel secrets are missing. Preview deploy was skipped." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "configured=true" >> "$GITHUB_OUTPUT"
+
       - name: Checkout
+        if: steps.vercel_secrets.outputs.configured == 'true'
         uses: actions/checkout@v4
 
       - name: Setup pnpm
+        if: steps.vercel_secrets.outputs.configured == 'true'
         uses: pnpm/action-setup@v4
 
       - name: Setup Node.js
+        if: steps.vercel_secrets.outputs.configured == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
 
       - name: Install dependencies
+        if: steps.vercel_secrets.outputs.configured == 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Pull Vercel environment
+        if: steps.vercel_secrets.outputs.configured == 'true'
         run: pnpm dlx vercel pull --yes --environment=preview --token="$VERCEL_TOKEN"
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -49,6 +64,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Build preview artifact
+        if: steps.vercel_secrets.outputs.configured == 'true'
         run: pnpm dlx vercel build --token="$VERCEL_TOKEN"
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -56,6 +72,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Deploy preview
+        if: steps.vercel_secrets.outputs.configured == 'true'
         id: deploy
         run: |
           OUTPUT="$(pnpm dlx vercel deploy --prebuilt --token="$VERCEL_TOKEN")"
@@ -68,7 +85,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Comment preview URL on PR
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && steps.vercel_secrets.outputs.configured == 'true'
         uses: actions/github-script@v7
         with:
           script: |
