@@ -4,15 +4,28 @@ type SendResult =
   | { ok: true }
   | { ok: false; message: string };
 
+function sanitizeHeaderValue(value: string): string {
+  return value.replace(/[\r\n]+/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function sanitizeMessageText(value: string): string {
+  return value.replace(/\u0000/g, "").replace(/\r\n?/g, "\n").trim();
+}
+
 function formatMessage(payload: ContactPayload): string {
+  const safeName = sanitizeHeaderValue(payload.name);
+  const safeEmail = sanitizeHeaderValue(payload.email);
+  const safeSubject = sanitizeHeaderValue(payload.subject);
+  const safeMessage = sanitizeMessageText(payload.message);
+
   return [
     `New website contact message`,
     ``,
-    `Name: ${payload.name}`,
-    `Email: ${payload.email}`,
-    `Subject: ${payload.subject}`,
+    `Name: ${safeName}`,
+    `Email: ${safeEmail}`,
+    `Subject: ${safeSubject}`,
     ``,
-    payload.message
+    safeMessage
   ].join("\n");
 }
 
@@ -37,8 +50,8 @@ async function sendWithResend(payload: ContactPayload): Promise<SendResult> {
     body: JSON.stringify({
       from: fromEmail,
       to: [toEmail],
-      subject: `[Website] ${payload.subject}`,
-      reply_to: payload.email,
+      subject: `[Website] ${sanitizeHeaderValue(payload.subject)}`,
+      reply_to: sanitizeHeaderValue(payload.email),
       text: formatMessage(payload)
     })
   });

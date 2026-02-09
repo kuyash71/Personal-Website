@@ -56,9 +56,9 @@ pnpm run test:e2e:install
 | `EMAIL_PROVIDER` | Yes | - | Email provider identifier | `resend` |
 | `EMAIL_API_KEY` | Yes | - | Provider API key | `re_xxx` |
 | `EMAIL_FROM` | Yes | - | Verified sender identity | `Portfolio <onboarding@resend.dev>` |
-| `CONTACT_MAX_PAYLOAD_BYTES` | No | `10000` | Maximum accepted request payload size for contact endpoint | `10000` |
-| `RATE_LIMIT_WINDOW_MS` | Yes | `600000` | Rate-limit window | `600000` |
-| `RATE_LIMIT_MAX_REQUESTS` | Yes | `5` | Max requests per window | `5` |
+| `CONTACT_MAX_PAYLOAD_BYTES` | No | `10000` | Maximum accepted payload size for contact endpoint (bounded to `1024-100000`) | `10000` |
+| `RATE_LIMIT_WINDOW_MS` | Yes | `600000` | Rate-limit window in milliseconds (bounded to `60000-3600000`) | `600000` |
+| `RATE_LIMIT_MAX_REQUESTS` | Yes | `5` | Max requests per window (bounded to `1-20`) | `5` |
 
 ## 4. Standard Scripts
 

@@ -40,17 +40,30 @@
 ### 3.1 Application Security
 
 - Input validation:
-  All contact fields are validated server-side.
+  All contact fields are validated server-side with strict length boundaries and control-character checks.
+  Single-line fields (`name`, `email`, `subject`, `website`) reject CR/LF header-injection patterns.
 - Output safety:
-  Avoid rendering untrusted HTML directly.
+  Avoid rendering untrusted HTML directly; contact status rendering stays plain text.
+  Outbound email header fields are sanitized before provider submission.
 - Secure headers:
   Document and enforce CSP/HSTS/nosniff/frame protections.
 - CSRF strategy:
   Restrict to intended method and origin-aware deployment defaults.
 - Rate limiting:
   IP-based windowing via `isAllowedByRateLimit`.
+  Runtime values are bounded to safe ranges (`window: 60s-3600s`, `max: 1-20`) and `Retry-After` is returned on `429`.
 - Payload size controls:
   Contact endpoint rejects oversized request bodies using `CONTACT_MAX_PAYLOAD_BYTES`.
+
+### 3.4 Contact Endpoint Security Profile
+
+| Control | Value |
+| --- | --- |
+| Rate-limit default | `5 requests / 10 minutes / IP` |
+| Rate-limit bounds | `RATE_LIMIT_WINDOW_MS: 60000-3600000`, `RATE_LIMIT_MAX_REQUESTS: 1-20` |
+| Payload limit default | `10000` bytes |
+| Payload limit bounds | `1024-100000` bytes |
+| Abuse responses | `400` (validation), `413` (payload), `429` (`Retry-After` header) |
 
 ### 3.2 Authentication and Authorization
 
@@ -124,5 +137,4 @@
 ## 10. Open Actions
 
 - [ ] Finalize production security header configuration.
-- [ ] Validate abuse-case thresholds with real traffic assumptions.
 - [ ] Confirm provider fallback behavior for email outages.

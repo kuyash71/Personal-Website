@@ -67,4 +67,23 @@ describe("validateContactPayload", () => {
       expect(result.errors).toContain("Invalid request.");
     }
   });
+
+  it("rejects header-injection characters in single-line fields", () => {
+    const result = validateContactPayload(
+      {
+        name: "Kuyash",
+        email: "test@example.com",
+        subject: "Hello\r\nBCC: attacker@example.com",
+        message: "This message body has enough characters.",
+        website: ""
+      },
+      "en"
+    );
+
+    expect(result.ok).toBe(false);
+
+    if (!result.ok) {
+      expect(result.errors).toEqual(["Invalid request."]);
+    }
+  });
 });

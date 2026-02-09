@@ -70,6 +70,42 @@ const apiMessages: Record<
   }
 };
 
+const RATE_LIMIT_WINDOW_DEFAULT_MS = 600000;
+const RATE_LIMIT_WINDOW_MIN_MS = 60000;
+const RATE_LIMIT_WINDOW_MAX_MS = 3600000;
+const RATE_LIMIT_MAX_DEFAULT = 5;
+const RATE_LIMIT_MAX_MIN = 1;
+const RATE_LIMIT_MAX_MAX = 20;
+const PAYLOAD_LIMIT_DEFAULT_BYTES = 10000;
+const PAYLOAD_LIMIT_MIN_BYTES = 1024;
+const PAYLOAD_LIMIT_MAX_BYTES = 100000;
+
+function getBoundedIntegerEnv(
+  key: string,
+  fallback: number,
+  minValue: number,
+  maxValue: number
+): number {
+  const raw = process.env[key];
+  const parsed = Number(raw ?? fallback);
+
+  if (!Number.isFinite(parsed)) {
+    return fallback;
+  }
+
+  const normalized = Math.trunc(parsed);
+
+  if (normalized < minValue) {
+    return minValue;
+  }
+
+  if (normalized > maxValue) {
+    return maxValue;
+  }
+
+  return normalized;
+}
+
 function normalizeLocale(value: unknown): Locale | null {
   if (typeof value !== "string") {
     return null;
@@ -125,8 +161,29 @@ function resolveRequestLocale(request: NextRequest, payload?: Record<string, unk
 }
 
 function getPayloadLimitBytes(): number {
-  const parsed = Number(process.env.CONTACT_MAX_PAYLOAD_BYTES ?? 10000);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : 10000;
+  return getBoundedIntegerEnv(
+    "CONTACT_MAX_PAYLOAD_BYTES",
+    PAYLOAD_LIMIT_DEFAULT_BYTES,
+    PAYLOAD_LIMIT_MIN_BYTES,
+    PAYLOAD_LIMIT_MAX_BYTES
+  );
+}
+
+function getRateLimitConfig(): { windowMs: number; maxRequests: number } {
+  return {
+    windowMs: getBoundedIntegerEnv(
+      "RATE_LIMIT_WINDOW_MS",
+      RATE_LIMIT_WINDOW_DEFAULT_MS,
+      RATE_LIMIT_WINDOW_MIN_MS,
+      RATE_LIMIT_WINDOW_MAX_MS
+    ),
+    maxRequests: getBoundedIntegerEnv(
+      "RATE_LIMIT_MAX_REQUESTS",
+      RATE_LIMIT_MAX_DEFAULT,
+      RATE_LIMIT_MAX_MIN,
+      RATE_LIMIT_MAX_MAX
+    )
+  };
 }
 
 function getContentLengthBytes(request: NextRequest): number | null {
@@ -140,8 +197,7 @@ function getContentLengthBytes(request: NextRequest): number | null {
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
-  const rateLimitWindow = Number(process.env.RATE_LIMIT_WINDOW_MS ?? 600000);
-  const rateLimitMax = Number(process.env.RATE_LIMIT_MAX_REQUESTS ?? 5);
+  const { windowMs: rateLimitWindow, maxRequests: rateLimitMax } = getRateLimitConfig();
   const payloadLimitBytes = getPayloadLimitBytes();
 
   const ipKey = getClientIp(request);
@@ -152,7 +208,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   if (!allowed) {
     return NextResponse.json(
       { ok: false, message: fallbackMessages.tooManyRequests },
-      { status: 429 }
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(Math.ceil(rateLimitWindow / 1000))
+        }
+      }
     );
   }
 

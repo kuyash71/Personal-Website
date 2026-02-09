@@ -215,24 +215,54 @@ describe("POST /api/contact", () => {
 
     expect(firstResponse.status).toBe(202);
     expect(secondResponse.status).toBe(429);
+    expect(secondResponse.headers.get("retry-after")).toBe("600");
     expect(body.ok).toBe(false);
     expect(body.message).toBe("Too many requests. Please try again later.");
     expect(mockedSendContactEmail).toHaveBeenCalledTimes(1);
   });
 
-  it("returns 413 when content length exceeds payload limit", async () => {
-    process.env.CONTACT_MAX_PAYLOAD_BYTES = "64";
+  it("returns 400 for unsafe header-injection payloads", async () => {
+    const response = await postContact(
+      createJsonContactRequest({
+        ip: "203.0.113.16",
+        payload: {
+          name: "Kuyash",
+          email: "test@example.com",
+          subject: "Hello\r\nBCC: attacker@example.com",
+          message: "This message should be rejected as an unsafe payload.",
+          website: "",
+          locale: "en"
+        }
+      })
+    );
+
+    const body = (await response.json()) as {
+      ok: boolean;
+      message: string;
+      errors: string[];
+    };
+
+    expect(response.status).toBe(400);
+    expect(body.ok).toBe(false);
+    expect(body.message).toBe("Validation error");
+    expect(body.errors).toEqual(["Invalid request."]);
+    expect(mockedSendContactEmail).not.toHaveBeenCalled();
+  });
+
+  it("returns 413 when JSON payload size exceeds payload limit", async () => {
+    process.env.CONTACT_MAX_PAYLOAD_BYTES = "1024";
+
+    const oversizedMessage = "x".repeat(2000);
 
     const response = await postContact(
       createJsonContactRequest({
         ip: "203.0.113.15",
         localeQuery: "en",
-        contentLength: 200,
         payload: {
           name: "Kuyash",
           email: "test@example.com",
           subject: "Payload limit test",
-          message: "This payload should be rejected before parsing.",
+          message: oversizedMessage,
           website: ""
         }
       })
