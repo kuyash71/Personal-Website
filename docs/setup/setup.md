@@ -143,3 +143,66 @@ pnpm run test:e2e:install
   24-48 hours for critical issues
 - Rollback drill:
   Validate rollback path monthly
+
+## 10. Production Deployment Runbook
+
+### 10.1 Release Preconditions
+
+- `main` branch CI is green:
+  `lint`, `test`, `build`, `e2e smoke`, `security scan`.
+- Production environment variables are configured in Vercel:
+  `CONTACT_TO_EMAIL`, `EMAIL_PROVIDER`, `EMAIL_API_KEY`, `EMAIL_FROM`, `RATE_LIMIT_WINDOW_MS`, `RATE_LIMIT_MAX_REQUESTS`.
+- Latest PR preview is reviewed for:
+  `/{locale}` routing, navbar links, and contact form behavior.
+
+### 10.2 Deployment Trigger
+
+- Primary path:
+  Merge approved PR into `main`.
+- Expected platform behavior:
+  Vercel auto-deploys production from the latest `main` commit.
+
+### 10.3 Post-Deployment Smoke Checks
+
+- Site routing:
+  `/`, `/tr`, `/en`, `/tr/projects`, `/en/projects`, `/tr/contact`, `/en/contact`.
+- API:
+  `GET /api/health` returns `200` with `ok: true`.
+- Contact flow:
+  Submit one valid test message and verify mailbox delivery.
+- Security/sanity:
+  Verify no runtime secret is exposed in client-rendered content.
+
+### 10.4 Release Recording
+
+- Record release version and commit SHA in release notes.
+- Confirm checklist section `Pre-Launch Checks` status.
+- Tag release if required by project policy.
+
+## 11. Rollback Path Validation
+
+### 11.1 Rollback Trigger Conditions
+
+- Production outage after deploy.
+- Critical regression in routing, localization, or API behavior.
+- Failed contact delivery caused by code-level change.
+
+### 11.2 Rollback Procedure (Vercel Dashboard)
+
+1. Open Vercel project `Deployments`.
+2. Identify the last known stable production deployment.
+3. Promote/redeploy that stable deployment to production.
+4. Verify production URL points to the rolled-back version.
+
+### 11.3 Rollback Verification Checklist
+
+- `GET /api/health` returns `200`.
+- Locale routes (`/tr`, `/en`) render correctly.
+- Contact form renders and `POST /api/contact` returns expected response shape.
+- No new critical/high vulnerabilities from dependency changes.
+
+### 11.4 Incident Follow-Up
+
+- Open incident note with:
+  failed deployment SHA, rollback deployment ID, root cause, and prevention action.
+- Add corrective action item to backlog before next release.
