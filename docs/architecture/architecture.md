@@ -179,6 +179,19 @@ Language switching (`TR`/`EN`) is available in the navbar and keeps users on the
   - Provider failure returns actionable API response.
   - Non-critical modules remain isolated.
 
+### 9.1 Performance Targets by Release
+
+| Release | LCP (p75) | CLS (p75) | INP (p75) | JS Budget (initial route) | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `1.0` (MVP) | `<= 2.5s` | `<= 0.10` | `<= 200ms` | `<= 220KB` gzip | Baseline target for launch readiness |
+| `1.1` | `<= 2.3s` | `<= 0.08` | `<= 180ms` | `<= 200KB` gzip | Medium optimization cycle |
+| `1.1a+` | No regression vs last stable | No regression vs last stable | No regression vs last stable | No regression vs last stable | Hot-fix and minor release guardrail |
+
+Measurement policy:
+- Measure with Lighthouse + real Web Vitals sample checks before release.
+- Track both `/tr` and `/en` routes for parity.
+- Any metric regression above `10%` must be justified in release notes.
+
 ## 10. Observability
 
 - Logging:
@@ -228,6 +241,8 @@ Language switching (`TR`/`EN`) is available in the navbar and keeps users on the
 | `2026-02-09` | Preview deployment workflow enabled for PRs | `accepted` | `docs/architecture/architecture.md` |
 | `2026-02-09` | Playwright adopted for critical E2E smoke tests | `accepted` | `docs/architecture/architecture.md` |
 | `2026-02-09` | Production deploy and rollback runbooks documented in setup docs | `accepted` | `docs/setup/setup.md` |
+| `2026-02-09` | Release-based performance targets documented (`1.0`/`1.1`/`1.1a+`) | `accepted` | `docs/architecture/architecture.md` |
+| `2026-02-09` | Strict lint baseline documented as merge gate | `accepted` | `docs/setup/setup.md` |
 
 ## 14. Open Questions
 

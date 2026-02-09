@@ -206,3 +206,16 @@ pnpm run test:e2e:install
 - Open incident note with:
   failed deployment SHA, rollback deployment ID, root cause, and prevention action.
 - Add corrective action item to backlog before next release.
+
+## 12. Lint Policy (Strict Baseline)
+
+- Config source:
+  `.eslintrc.json` extends `next/core-web-vitals` and `next/typescript`.
+- Enforcement rule:
+  `pnpm run lint` must pass in CI before merge.
+- Merge gate:
+  Any lint **error** blocks merge.
+- Warning policy:
+  Warnings are tracked and should be resolved in the nearest maintenance cycle; no unresolved warning should persist into a planned production release.
+- Ownership:
+  The maintainer is responsible for resolving lint regressions before approving deployment.
