@@ -46,3 +46,5 @@ Thumbs.db
 
 # Local working notes
 docs/tmp/
+.vercel
+.env*.local
