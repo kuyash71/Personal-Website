@@ -38,7 +38,7 @@ Map each selected technology to concrete files and runtime layers.
 | Node runtime pinning | Node 22 | `.nvmrc`, `.node-version`, `package.json -> engines` |
 | Type checking | TypeScript | `tsconfig.json` |
 | Linting | ESLint + Next config | `.eslintrc.json`, `package.json` |
-| Test runner | Vitest | `vitest.config.ts`, `package.json`, `tests/unit/*` |
+| Test runner | Vitest | `vitest.config.ts`, `package.json`, `tests/unit/*`, `tests/integration/*` |
 | Continuous Integration | GitHub Actions | `.github/workflows/ci.yml`, `.github/workflows/preview.yml` |
 | Runtime secrets | Environment variables | `.env.example`, `docs/setup/setup.md` |
 
