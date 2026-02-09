@@ -71,6 +71,7 @@ pnpm run test:e2e:install
 | `pnpm run test:e2e:install` | Install Playwright Chromium browser | Initial setup / CI image prep |
 | `pnpm run test:e2e` | Run Playwright smoke E2E tests | Before release / navigation checks |
 | `pnpm run test:e2e:ui` | Run Playwright with UI mode | Local debugging |
+| `PLAYWRIGHT_BASE_URL=<url> pnpm run test:e2e` | Run E2E against deployed URL | Pre-launch production verification |
 | `pnpm run build` | Production build verification | Before release |
 | `pnpm run verify:env` | Validate local `.env.local` contract | Before local QA and integration testing |
 | `pnpm run verify:env:prod` | Validate production env values from runtime/exported env | Before production deploy |
