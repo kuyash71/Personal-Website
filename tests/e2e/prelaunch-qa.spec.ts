@@ -14,8 +14,8 @@ const localeNavCases: LocaleNavCase[] = [
   {
     locale: "tr",
     links: [
-      { label: "Anasayfa", path: "/tr", heading: "Kuyash" },
-      { label: "Güneş Üçlemesi", path: "/tr/sun-trilogy", heading: "Güneş Üçlemesi" },
+      { label: "Anasayfa", path: "/tr", heading: "Merhaba" },
+      { label: "Sun Trilogy", path: "/tr/sun-trilogy", heading: "Güneş Üçlemesi" },
       { label: "Projeler", path: "/tr/projects", heading: "Projeler" },
       { label: "İletişim", path: "/tr/contact", heading: "İletişim" }
     ]
@@ -23,7 +23,7 @@ const localeNavCases: LocaleNavCase[] = [
   {
     locale: "en",
     links: [
-      { label: "Home", path: "/en", heading: "Kuyash" },
+      { label: "Home", path: "/en", heading: "Hello" },
       { label: "Sun Trilogy", path: "/en/sun-trilogy", heading: "Sun Trilogy" },
       { label: "Projects", path: "/en/projects", heading: "Projects" },
       { label: "Contact", path: "/en/contact", heading: "Contact" }

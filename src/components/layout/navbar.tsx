@@ -36,19 +36,27 @@ function resolveInitialTheme(): Theme {
 export function Navbar({ locale, labels }: NavbarProps) {
   const pathname = usePathname();
   const [theme, setTheme] = useState<Theme>("light");
+  const [isThemeReady, setIsThemeReady] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navItems = getNavItems(locale, labels);
   const trHref = pathname ? pathname.replace(/^\/(tr|en)/, "/tr") : "/tr";
   const enHref = pathname ? pathname.replace(/^\/(tr|en)/, "/en") : "/en";
 
   useEffect(() => {
-    setTheme(resolveInitialTheme());
+    const resolvedTheme = resolveInitialTheme();
+    setTheme(resolvedTheme);
+    document.documentElement.setAttribute("data-theme", resolvedTheme);
+    setIsThemeReady(true);
   }, []);
 
   useEffect(() => {
+    if (!isThemeReady) {
+      return;
+    }
+
     document.documentElement.setAttribute("data-theme", theme);
     window.localStorage.setItem(THEME_STORAGE_KEY, theme);
-  }, [theme]);
+  }, [theme, isThemeReady]);
 
   useEffect(() => {
     setIsMenuOpen(false);

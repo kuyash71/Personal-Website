@@ -1,5 +1,8 @@
 export type ProjectStatus = "active" | "archived" | "wip";
 export type UniverseState = "wip" | "ready";
+export type SunTrilogyTheme = "war" | "shadow" | "dawn";
+export type SunTrilogyIcon = "eye" | "moon" | "sun";
+export type SunTrilogyStoryStatus = "pending" | "writing" | "planned";
 
 export type SocialLink = {
   label: string;
@@ -26,9 +29,32 @@ export type Project = {
 export type SunTrilogyUniverse = {
   id: string;
   name: string;
-  tagline: string;
-  state: UniverseState;
-  coverImage?: string;
+  era: string;
+  summary: string;
+  githubUrl: string;
+  detailId: string;
+  theme: SunTrilogyTheme;
+  icon: SunTrilogyIcon;
+};
+
+export type SunTrilogyStory = {
+  id: string;
+  title: string;
+  startDate: string;
+  description: string;
+  status: SunTrilogyStoryStatus;
+  icon: SunTrilogyIcon;
+};
+
+export type SunTrilogyContent = {
+  introTitle: string;
+  introText: string;
+  title: string;
+  slogan: string;
+  storiesTitle: string;
+  statuses: Record<SunTrilogyStoryStatus, string>;
+  universes: SunTrilogyUniverse[];
+  stories: SunTrilogyStory[];
 };
 
 export type ContactPayload = {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { Navbar } from "@/components/layout/navbar";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { isLocale, locales } from "@/i18n/config";
 import { messages } from "@/i18n/messages";
 
@@ -46,6 +47,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       <main className="page">
         <div className="container">{children}</div>
       </main>
+      <SiteFooter locale={resolvedParams.locale} />
     </>
   );
 }

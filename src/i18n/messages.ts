@@ -54,7 +54,7 @@ export const messages: Record<Locale, Messages> = {
     },
     nav: {
       home: "Anasayfa",
-      sunTrilogy: "Güneş Üçlemesi",
+      sunTrilogy: "Sun Trilogy",
       projects: "Projeler",
       contact: "İletişim"
     },
