@@ -82,6 +82,8 @@ pnpm run dev
   GitHub Actions
 - Required checks:
   `lint`, `test`, `build`, `security scan`
+- Workflow file:
+  `.github/workflows/ci.yml`
 - Deployment targets:
   Preview + production
 - Rollback strategy:
