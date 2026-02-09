@@ -42,10 +42,10 @@ describe("validateContactPayload", () => {
     expect(result.ok).toBe(false);
 
     if (!result.ok) {
-      expect(result.errors).toContain("Gecerli bir ad girin.");
-      expect(result.errors).toContain("Gecerli bir e-posta adresi girin.");
-      expect(result.errors).toContain("Konu en az 3 karakter olmalidir.");
-      expect(result.errors).toContain("Mesaj en az 10 karakter olmalidir.");
+      expect(result.errors).toContain("Geçerli bir ad girin.");
+      expect(result.errors).toContain("Geçerli bir e-posta adresi girin.");
+      expect(result.errors).toContain("Konu en az 3 karakter olmalıdır.");
+      expect(result.errors).toContain("Mesaj en az 10 karakter olmalıdır.");
     }
   });
 

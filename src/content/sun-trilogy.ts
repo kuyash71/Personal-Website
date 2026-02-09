@@ -6,19 +6,19 @@ export const sunTrilogyData: Record<Locale, SunTrilogyUniverse[]> = {
     {
       id: "universe-1",
       name: "Evren I",
-      tagline: "Ilk fantastik katmanin temel hikayesi.",
+      tagline: "İlk fantastik katmanın temel hikâyesi.",
       state: "wip"
     },
     {
       id: "universe-2",
       name: "Evren II",
-      tagline: "Ikincil dunya ve karakter yapisi.",
+      tagline: "İkincil dünya ve karakter yapısı.",
       state: "wip"
     },
     {
       id: "universe-3",
       name: "Evren III",
-      tagline: "Uclemeyi tamamlayacak final catismasi.",
+      tagline: "Üçlemeyi tamamlayacak final çatışması.",
       state: "wip"
     }
   ],

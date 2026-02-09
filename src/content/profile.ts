@@ -5,7 +5,7 @@ export const profileData: Record<Locale, Profile> = {
   tr: {
     fullName: "Kuyash",
     title: "Software Developer",
-    summary: "Yazilim projeleri gelistiriyor ve kendi fantastik evrenlerini insa eden bir gelistirici.",
+    summary: "Yazılım projeleri geliştiriyor ve kendi fantastik evrenlerini inşa eden bir geliştirici.",
     skills: ["TypeScript", "React", "Next.js", "Node.js", "Testing"],
     socialLinks: [
       { label: "GitHub", href: "https://github.com/" },

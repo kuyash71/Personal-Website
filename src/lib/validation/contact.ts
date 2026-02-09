@@ -28,11 +28,11 @@ const validationMessages: Record<
   }
 > = {
   tr: {
-    invalidName: "Gecerli bir ad girin.",
-    invalidEmail: "Gecerli bir e-posta adresi girin.",
-    invalidSubject: "Konu en az 3 karakter olmalidir.",
-    invalidMessage: "Mesaj en az 10 karakter olmalidir.",
-    invalidRequest: "Gecersiz istek."
+    invalidName: "Geçerli bir ad girin.",
+    invalidEmail: "Geçerli bir e-posta adresi girin.",
+    invalidSubject: "Konu en az 3 karakter olmalıdır.",
+    invalidMessage: "Mesaj en az 10 karakter olmalıdır.",
+    invalidRequest: "Geçersiz istek."
   },
   en: {
     invalidName: "Please provide a valid name.",

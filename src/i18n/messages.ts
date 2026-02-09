@@ -49,47 +49,47 @@ export type Messages = {
 export const messages: Record<Locale, Messages> = {
   tr: {
     metadata: {
-      title: "Kuyash | Kisisel Website",
-      description: "Kisisel profil, projeler ve Gunes Uclemesi evrenleri."
+      title: "Kuyash | Kişisel Website",
+      description: "Kişisel profil, projeler ve Güneş Üçlemesi evrenleri."
     },
     nav: {
       home: "Anasayfa",
-      sunTrilogy: "Gunes Uclemesi",
+      sunTrilogy: "Güneş Üçlemesi",
       projects: "Projeler",
-      contact: "Iletisim"
+      contact: "İletişim"
     },
     home: {
       skillsHeading: "Yetkinlikler",
-      linksHeading: "Baglantilar"
+      linksHeading: "Bağlantılar"
     },
     sunTrilogy: {
-      title: "Gunes Uclemesi",
-      subtitle: "Bu bolum ozel olarak insa edilecek. Simdilik WIP durumundadir.",
+      title: "Güneş Üçlemesi",
+      subtitle: "Bu bölüm özel olarak inşa edilecek. Şimdilik WIP durumundadır.",
       wipBadge: "WIP"
     },
     projects: {
       title: "Projeler",
-      subtitle: "Yazilim projeleri ve bagli GitHub repo linkleri.",
+      subtitle: "Yazılım projeleri ve bağlı GitHub repo linkleri.",
       technologiesLabel: "Teknolojiler",
       repoCta: "GitHub Repo"
     },
     contact: {
-      title: "Iletisim",
-      description: "Asagidaki formu doldurarak bana dogrudan e-posta gonderebilirsin.",
+      title: "İletişim",
+      description: "Aşağıdaki formu doldurarak bana doğrudan e-posta gönderebilirsin.",
       labels: {
         name: "Ad",
         email: "E-posta",
         subject: "Konu",
         message: "Mesaj"
       },
-      submit: "Mesaj Gonder",
-      submitting: "Gonderiliyor...",
+      submit: "Mesaj Gönder",
+      submitting: "Gönderiliyor...",
       status: {
-        success: "Mesaj basariyla gonderildi.",
-        error: "Mesaj gonderilemedi.",
-        networkError: "Baglanti hatasi olustu. Lutfen tekrar dene."
+        success: "Mesaj başarıyla gönderildi.",
+        error: "Mesaj gönderilemedi.",
+        networkError: "Bağlantı hatası oluştu. Lütfen tekrar dene."
       },
-      note: "E-posta gonderimi icin .env.local dosyasinda EMAIL_PROVIDER=resend ve ilgili anahtarlar tanimli olmalidir."
+      note: "E-posta gönderimi için .env.local dosyasında EMAIL_PROVIDER=resend ve ilgili anahtarlar tanımlı olmalıdır."
     }
   },
   en: {

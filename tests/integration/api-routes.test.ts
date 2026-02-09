@@ -155,9 +155,9 @@ describe("POST /api/contact", () => {
 
     expect(response.status).toBe(400);
     expect(body.ok).toBe(false);
-    expect(body.message).toBe("Dogrulama hatasi");
-    expect(body.errors).toContain("Gecerli bir ad girin.");
-    expect(body.errors).toContain("Gecerli bir e-posta adresi girin.");
+    expect(body.message).toBe("Doğrulama hatası");
+    expect(body.errors).toContain("Geçerli bir ad girin.");
+    expect(body.errors).toContain("Geçerli bir e-posta adresi girin.");
     expect(mockedSendContactEmail).not.toHaveBeenCalled();
   });
 

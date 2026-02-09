@@ -50,14 +50,14 @@ const apiMessages: Record<
   }
 > = {
   tr: {
-    tooManyRequests: "Cok fazla istek. Lutfen daha sonra tekrar deneyin.",
-    payloadTooLarge: "Istek govdesi cok buyuk. Daha kisa bir mesaj deneyin.",
+    tooManyRequests: "Çok fazla istek. Lütfen daha sonra tekrar deneyin.",
+    payloadTooLarge: "İstek gövdesi çok büyük. Daha kısa bir mesaj deneyin.",
     unsupportedContentType:
-      "Desteklenmeyen Content-Type. application/json, multipart/form-data veya application/x-www-form-urlencoded kullanin.",
-    invalidBody: "Gecersiz istek govdesi formati.",
-    validationError: "Dogrulama hatasi",
-    deliveryFailed: "Mesaj alindi ancak e-posta teslimi basarisiz oldu.",
-    accepted: "Mesaj alindi ve e-posta olarak iletildi."
+      "Desteklenmeyen Content-Type. application/json, multipart/form-data veya application/x-www-form-urlencoded kullanın.",
+    invalidBody: "Geçersiz istek gövdesi formatı.",
+    validationError: "Doğrulama hatası",
+    deliveryFailed: "Mesaj alındı ancak e-posta teslimi başarısız oldu.",
+    accepted: "Mesaj alındı ve e-posta olarak iletildi."
   },
   en: {
     tooManyRequests: "Too many requests. Please try again later.",
